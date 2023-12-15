@@ -64,7 +64,10 @@ function getSrcPath( mod: ModDescriptor ) {
 function getDestPath( mod: ModDescriptor, path: string ) {
 	// Losing my mind because the POSIX version of normalize() doesn't replace windows
 	// path separators with POSIX ones.
-	const stripped_path = normalize(path).replace(/\\/g, '/').replace(getSrcPath(mod), '')
+	const stripped_path = normalize(path)
+		.replace(/\\/g, '/')
+		.replace(getSrcPath(mod), '')
+		.replace(`overrides/${mod.name}/custom_files`, '')
 
 	return join('dist/RWP_Modpack/GameData', mod.settings.dest_path ?? mod.name, stripped_path)
 }
@@ -139,10 +142,17 @@ async function copyModFiles( mod: ModDescriptor ) {
 	}
 
 	// Add in any custom files from outside the mod's directory
-	//mod.custom_files?.forEach( f => to_copy.add(f) )
+	//
 
 	// Start copying things
 	for( const path of to_copy ) {
+		const dest = normalize(getDestPath(mod, path))
+
+		await copy(path, dest, {overwrite: true})
+	}
+
+	// Add in custom files
+	for( const path of mod.custom_files ?? [] ) {
 		const dest = normalize(getDestPath(mod, path))
 
 		await copy(path, dest, {overwrite: true})
@@ -188,6 +198,9 @@ async function main() {
 
 		await copyModFiles( await getModMetadata(mod_name) )
 	}
+
+	// Copy the readme
+	await copy('README.md', 'dist/RWP_Modpack/README.md', {overwrite: true})
 
 	console.log(`Creating zip folder...`)
 	console.time('zip')
