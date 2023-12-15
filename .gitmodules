@@ -22,3 +22,6 @@
 [submodule "mods/SimpleRepaint"]
 	path = mods/SimpleRepaint
 	url = git@github.com:judicator/SimpleRepaint.git
+[submodule "mods/AirplanePlus"]
+	path = mods/AirplanePlus
+	url = git@github.com:runway-project/AirplanePlus.git
