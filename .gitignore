@@ -1,0 +1,10 @@
+dist/
+
+# NPM
+node_modules/
+
+# Blender and Substance autosaves/backups/etc
+*.blend1
+*_RetopoFlow_AutoSave.blend
+*_autosave_*.spp
+*.painter_lock
