@@ -98,7 +98,7 @@ async function getModMetadata( name: string ): Promise<ModDescriptor> {
 		exclude_list = (await readFile( `${meta_path}/exclude_list.txt`, { encoding: 'utf-8' } )).split(/\r?\n/).filter(f => f)
 
 	// Grab a list of custom assets to copy over
-	custom_files = await glob( `${meta_path}/custom_files/**/*`)
+	custom_files = await glob( `${meta_path}/custom_files/**/*.{${include_file_extensions.join(',')}}`)
 
 	// Normalize settings
 	settings = {
@@ -129,7 +129,7 @@ async function copyModFiles( mod: ModDescriptor ) {
 	}
 	// If not, just include everything with a matching file type
 	else {
-		const paths = await glob(`${normalize(getSrcPath(mod))}/**/*.{${include_file_extensions.join(',')}}`)
+		const paths = await glob(`${normalize(getSrcPath(mod))}/**/*`)
 		
 		paths.forEach( path => to_copy.add(path) )
 	}

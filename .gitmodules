@@ -1,6 +1,3 @@
-[submodule "mods/BDArmory"]
-	path = mods/BDArmory
-	url = git@github.com:BrettRyland/BDArmory.git
 [submodule "mods/Moderately-Plane-Related"]
 	path = mods/Moderately-Plane-Related
 	url = git@github.com:Drag0nD3str0yer/Moderately-Plane-Related.git
