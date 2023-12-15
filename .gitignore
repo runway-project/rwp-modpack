@@ -11,4 +11,4 @@ node_modules/
 
 src/**/*.fbx
 src/**/export
-src/**/*.spp
+src/parts/podracer/S5R5 Assets.spp
