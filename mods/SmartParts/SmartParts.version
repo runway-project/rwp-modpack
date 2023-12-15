@@ -1,0 +1,25 @@
+{
+  "NAME": "SmartParts",
+  "URL": "http://ksp.spacetux.net/avc/SmartParts",
+  "DOWNLOAD": "https://github.com/linuxgurugamer/KerbalSmartParts/releases",
+  "GITHUB": {
+    "USERNAME": "linuxgurugamer",
+    "REPOSITORY": "KerbalSmartParts"
+  },
+  "VERSION": {
+    "MAJOR": 1,
+    "MINOR": 9,
+    "PATCH": 17,
+    "BUILD": 0
+  },
+  "KSP_VERSION": {
+    "MAJOR": 1,
+    "MINOR": 12,
+    "PATCH": 2
+  },
+  "KSP_VERSION_MIN": {
+    "MAJOR": 1,
+    "MINOR": 12,
+    "PATCH": 0
+  }
+}

@@ -67,3 +67,7 @@ Interstellar Fuel Switch is distributed under the [Creative Commons NonCommercia
 ### SimpleRepaint
 
 [SimpleRepaint](https://github.com/judicator/SimpleRepaint) is distributed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0)](http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
+
+### SmartParts
+
+[SmartParts](https://forum.kerbalspaceprogram.com/topic/151340-112x-smart-parts-continued/) is distributed under a [CC BY-NC-SA 3.0 License](https://creativecommons.org/licenses/by-nc-sa/3.0/us/).
