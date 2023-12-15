@@ -16,3 +16,9 @@
 [submodule "mods/CommunityResourcePack"]
 	path = mods/CommunityResourcePack
 	url = git@github.com:UmbraSpaceIndustries/CommunityResourcePack.git
+[submodule "mods/KSP-Conformal-Decals"]
+	path = mods/KSP-Conformal-Decals
+	url = git@github.com:drewcassidy/KSP-Conformal-Decals.git
+[submodule "mods/SimpleRepaint"]
+	path = mods/SimpleRepaint
+	url = git@github.com:judicator/SimpleRepaint.git
