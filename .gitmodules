@@ -1,0 +1,18 @@
+[submodule "mods/BDArmory"]
+	path = mods/BDArmory
+	url = git@github.com:BrettRyland/BDArmory.git
+[submodule "mods/Moderately-Plane-Related"]
+	path = mods/Moderately-Plane-Related
+	url = git@github.com:Drag0nD3str0yer/Moderately-Plane-Related.git
+[submodule "mods/Mk3Expansion"]
+	path = mods/Mk3Expansion
+	url = git@github.com:SuicidalInsanity/Mk3Expansion.git
+[submodule "mods/Mk2Expansion"]
+	path = mods/Mk2Expansion
+	url = git@github.com:SuicidalInsanity/Mk2Expansion.git
+[submodule "mods/BDArmory-Extended"]
+	path = mods/BDArmory-Extended
+	url = git@github.com:BrettRyland/BDArmory-Extended.git
+[submodule "mods/CommunityResourcePack"]
+	path = mods/CommunityResourcePack
+	url = git@github.com:UmbraSpaceIndustries/CommunityResourcePack.git
