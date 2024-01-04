@@ -1,0 +1,345 @@
+v1.31.0
+Improvements / Bugfixes:
+- Fix NREs from atmospheric audiosources when not in atmosphere.
+- Don't reset the original camera parent's position when reverting (fixes weird camera angle).
+- Override the camera restore distance with custom distance (from BDA) when reverting due to auto-enabling for BDA.
+- Add support for a new BDA helper property for inhibiting camera tools.
+- Add support for new BDA helpers for tracking missiles' targets in dogfight mode.
+- Minor tweaks to MouseAimFlight helpers.
+- Some internal restructuring of utils.
+- Begin adding localisation support (not yet complete).
+- Begin adding tooltips (not yet complete).
+
+v1.30.1
+Improvements / Bugfixes:
+- Sanitise timestamps by shifting duplicates by 0.001s instead of breaking the view frustrum with NaNs and avoid division by 0 in spline calculations.
+
+v1.30.0
+Improvements / Bugfixes:
+- Fix stock aero FX not being applied and provide a toggle to disable them.
+- Adjustments to fix some issues when BDArmory should be inhibiting CameraTools and more detailed debugging messages.
+- Add check for new BDA OrbitalAI.
+
+v1.29.2
+Improvements / Bugfixes:
+- Fix an AudioSource memory leak.
+
+v1.29.1
+Improvements / Bugfixes:
+- Fix wind-tear audio being overly loud from recent tweaks.
+
+v1.29.0
+Improvements / Bugfixes:
+- Add a configurable movement threshold to activating free-look mode (default: 0.1).
+- If the camera parent gets stolen, automatically steal it back if it's the original camera parent (due to spawning a kerbal, BDA MML, etc.).
+- Allow customising the maximum value of the zoom, auto zoom, dogfight distance and dogfight offsets in the settings.cfg.
+- Optimisations to how part audio effects are managed.
+- Rework the sonic boom calculations, allowing them to reset and removing the booming when switching vessels/restarting camera modes.
+
+v1.28.0
+Improvements / Bugfixes:
+- Adjust random mode selection for low altitude to be more amenable to BDA pod-racing.
+- Add a visual toggle for free-move mode (speed vs position).
+- Add an optional keybind for resetting the roll in stationary camera mode. Initially unbound, remove the entry from the settings.cfg to unbind it once bound.
+- Fix camera position in Stationary and Dogfight modes when returning from Map mode.
+- Add a free-look mode to Dogfight mode (hold right mouse button, compatible with MouseAimFlight integration).
+
+v1.27.0
+Improvements / Bugfixes:
+- Fix dogfight centroid mode.
+- Add checks for the active vessel being a BDA missile and use dogfight chase mode if it is.
+- Add roll option to stationary camera using right+middle mouse buttons, with the movement modifier key (keypad enter) switching between camera and world coordinate systems.
+- Add support for using the MouseAimFlight mod in dogfight camera mode.
+- Delay camera activation/deactivation when not in flight mode until back in flight mode.
+
+v1.26.0
+Improvements / Bugfixes:
+- Prevent the camera from going below the surface in dogfight mode when the vessel is landed or near the surface when splashed.
+- Disable roll and offset in dogfight mode when the vessel is an EVA kerbal.
+- Ignore ksp_dir.txt lines starting with # for post-build events in Linux (not sure how Windows should do this).
+- Fix bug in field name for input boxes.
+
+v1.25.0
+Improvements / Bugfixes:
+- Add an inertial chase mode to the dogfight camera.
+	- Inertial factor provides a looseness to the camera position.
+	- Offsets are relative to the vessel frame of reference, instead of the camera frame of reference.
+- Save / restore other AudioSource fields that get modified as part of doppler SFX in case this is part of the cause of some sound bugs (not sure if it is or not, but better safe than sorry).
+- Rework the BDA secondary target priority to favour the vessel's target (instead of attacker) when it has recently been firing or fired a missile (requires BDA+ v1.5.4.1 or later).
+- Add a slider to control the minimum update interval of the BDA secondary target selection after switching targets (updates occur every 0.5s after the minimum interval has elapsed).
+
+v1.24.0
+Improvements / Bugfixes:
+- Initialise the "maxRelV" numeric field properly so that the field-width parameter is 6, not the min value.
+- Cache the atmospheric audio sound clips to avoid GC allocations.
+- Include the fix (from BDArmory) for Apple Silicon (M1 chip) not calculating sqrt properly when multiplied by a float.
+	- https://issuetracker.unity3d.com/issues/m1-incorrect-calculation-of-values-using-multiplication-with-mathf-dot-sqrt-when-an-unused-variable-is-declared
+- Add an auto-landing option to the stationary camera.
+	- Without "Maintain Vel." enabled, the position of the camera is based on the vessel's current position.
+	- With "Maintain Vel." enabled, the position of the camera is based on the vessel's predicted terrain intercept if it follows a ballistic trajectory (no drag).
+	- The altitude of the camera above the terrain is defined by the "Up" component of the "Manual Flyby Position".
+	- An extra horizontal offset is defined by the "Fwd" (in the vessel's velocity direction when activated) and "Right" components.
+
+v1.23.0
+Improvements / Bugfixes:
+- Fix some memory leaks detected by KSPCF.
+- Refactor integration with other mods into their own files (mostly). Some BDArmory-related settings may need resetting.
+- Allow deploying to multiple KSP instances when compiling in Linux.
+- Add speed free-move mode for keyboard input (default toggle [2]).
+	- Toggling this resets the speed to zero.
+	- Disabled when in numeric input mode.
+- Update numeric input fields when making changes with keyboard input.
+- Add display field-width parameter to numeric input fields.
+
+v1.22.0
+Bugfixes:
+- Add check for the class type of VesselSpawner due to the current changes in BDA dev.
+- Fix BindingFlags for initial reflection due to changes in BDArmory.
+Improvements:
+- Add a target centroid option for the dogfight mode.
+- Replace reflection for BDArmory with delegates for much faster field/property access.
+- Lower the log error for not being able to set IVA camera mode to a warning.
+
+v1.21.0
+Improvements:
+- Updated fields/properties for an internal refactor in BDArmory.
+- Don't revert the camera when there's no further dogfight targets.
+
+v1.20.0
+Bugfixes:
+- Don't reset the zoom value when reverting the FoV.
+- Fix the lower limit of the camera shake multiplier when using numeric fields.
+- Make the config paths relative to the KSP app location (makes it more relocatable).
+- Fix an NRE in the audio controller.
+Improvements:
+- Add a version number and activation toggle/indicator to the GUI.
+- Separate zoom and autozoom parameters for the different modes so that adjusting zoom levels in one mode doesn't affect other modes.
+- Tweak the camera shake slider to use steps of 0.1.
+- Move the floating origin corrections for the stationary camera to the BetterLateThanNever timing phase to avoid the occasional flicker.
+- Remove the 0 minimum of the max relative velocity to allow reverse fly-bys with the stationary camera again.
+- Only disable TimeControl's CameraZoomFix while CameraTools is active so as to avoid interfering with that mod while CameraTools isn't active.
+- Look for and disable BetterTimeWarp's ScaleCameraSpeed while CameraTools is active, since that also messes with CameraTools during slow-mo.
+- BDA Auto Targeting: add an option to not target incoming missiles.
+- Corrections to the KrakensbaneWarpCorrection for dogfight and stationary camera modes so that they work (almost) correctly at all altitudes and warp levels.
+	- Known issues for the stationary camera when maintaining orbital velocity are:
+		- When changing low warp rate at above 100km altitude a slow drift begins, as if the orbit calculation position is slightly wrong. I.e., starting at a given low warp and staying there is fine, but once changed the drift begins.
+		- Below 100km altitude, there is a small unsteady drift when not in high warp (and exaggerated by low warp) and once noticeably present continues after entering high warp.
+		- Switching in and out of map mode returns the camera to the wrong position.
+
+v1.19.2
+Bugfixes:
+- Check for the flight camera being null on startup (caused by other modules crashing KSP).
+- Fix check for secondary camera target priorities (incoming missiles are prioritised, then incoming fire, then current vessel's target).
+- Ignore maxRelV when random mode is enabled (should fix badly placed stationary camera on vessel switches).
+Improvements:
+- Allow the stationary camera to be placed up to 5km higher to avoid potential terrain line-of-sight issues.
+
+v1.19.1
+Bugfixes:
+ - Fix random mode transitions that got broken in the last release.
+ - Delay activating the new camera mode on vessel switches until LateUpdate for all camera modes, not just dogfight mode.
+ - Reset the zoom slider when resetting the FOV.
+ - Auto-switch the auto-zoom to regular zoom when entering pathing mode as pathing only uses the regular zoom.
+ - Remove the temporaryRevert code (I think that was a Scott Manley hack).
+Improvements:
+ - Adds autoEnableOverride for BDArmory's tournament inter-round time-warping.
+
+v1.19.0
+Improvements:
+ - Use a more stable direction for dogfight mode when the vessel is bobbing around on the ocean.
+ - Auto-Enable for BDArmory when using surface AIs too.
+ - Interpolation rate setting renamed to 'Secondary Smoothing', which takes values in the linear range from 0 to 1 to try to give the user a more intuitive understanding of what the setting does. Actual Lerp values are calculated as 10 ^ {-2 * secondary smoothing} (i.e., 1 to 0.01). Old paths are automatically upgraded to use the new variable.
+ - The default hotkey for toggling the menu is now [0] (keypad 0) to avoid a conflict with the new AI GUI in BDArmory, which uses [/].
+ - A variety of QoL improvements for pathing mode by HatBat:
+	- Keys created during path playback are now automatically inserted at the current path time. Useful for molding paths in to specific shapes.
+	- Added a 'Maintain Speed' button to the keyframe editor that adjusts the duration of the current keyframe to approximately match the speed between the previous two keyframes. Useful for smoothly extending paths and correcting speed inconsistencies in complex paths.
+	- Camera updates can now be switched between Update or 'Real-time' and FixedUpdate or 'In-Game Time'. 'Real-time' creates smoother paths and works while the game is paused, which helps to reduce lag, while 'In-Game Time' is useful for making sure pathing speed is consistent with game physics and that none of the path is skipped when processing footage to remove lag. See FFmpeg's mpdecimate.
+	- New keyframes created while CameraTools is inactive are now correctly started at the current camera position, rather than on top of the vessel facing down or inside the vessel, and use the stock zoom.
+	- Path playback now starts from the selected keyframe if one is selected. Useful for previewing small changes to long paths.
+	- The flight camera now correctly reverts to its original distance, orientation, zoom state and mode when pathing is deactivated.
+	- Camera zoom is now updated immediately rather than gradually when selecting a keyframe or starting a path.
+	- [7]/[1] now moves the pathing camera up/down relative to the frame instead of the ground. This functionality was previously on the scroll wheel.
+	- Vertical movement with the mouse is now triggered by holding both the middle and left mouse buttons and moving the mouse forward/backward (replaces the previous scroll wheel functionality).
+	- Holding keypad Enter (configurable) modifies the reference frame for movement to be relative to the vessel instead of the camera. Also, left/right and forward/backward are reversed for more natural movement when viewing the vessel from the front, which is the typical use-case.
+	- The scroll wheel now adjusts the move speed while the pathing camera is active. This is useful for quickly switching between fine adjustments and repositioning of the camera.
+	- The default time increment for new keys has been changed back to 10 seconds from 1 second. This is a more practical default path length and makes manually inserting new keys easier.
+	- The default rotation interpolation mode is now CubicSpline, was previously Slerp.
+	- The last path you used is now remembered between restarts.
+	- The GUI no longer closes on pressing save. Replaced by a bit of visual feedback. Useful for habitual save pressers.
+
+v1.18.2:
+Improvements:
+ - Re-add the "interpolation rate" parameter in pathing. (A value of 1 means that the camera follows the defined path precisely. A value less than 1 means that the camera chases the point on the path.)
+
+v1.18.1:
+Improvements:
+ - Add customisable min/max values to the keypad move and zoom speeds (editable in the settings.cfg).
+
+v1.18.0:
+Improvements:
+ - Add option for text input fields instead of sliders.
+ - Add 'Maintain Vel.' option, which is the equivalent of the old 'Initial Velocity' reference mode.
+ - Make the menu toggle hotkey configurable too.
+ - Make loading of paths a bit more fault tolerant.
+
+v1.17.0
+Bugfixes:
+ - Only activate the camera when changing modes if it was already active.
+ - Don't automatically start playing a path when adjusting it or creating a new one and stop it if keyframes or the path is deleted.
+ - Start playing a path when it's loaded if camera tools is active.
+ - Adjust ordering of stationary path updates to avoid jitter.
+Improvements:
+ - Automatically disable TimeControl's camera zoom fix as it breaks CameraTools when slow-mo is enabled (sorry @ntwest).
+ - Switch stationary and pathing cameras to run in Update instead of FixedUpdate as they aren't sensitive to physics updates.
+ - Switch pathing camera to use unscaled time so that it works while paused.
+ - Add option of cubic spline interpolation to pathing mode positions based on https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Interpolation_on_an_arbitrary_interval.
+ - Add option of Slerp and cubic spline interpolation to pathing mode rotations.
+ 	- Note: the interpolation method is used from the keypoint it's set in until the next one, so different parts of the path can use different interpolation methods.
+ - Rework stationary camera to actually make the camera stationary when below maxRelV. Jumps due to CoM changes (e.g., launch clamp detachment) should not affect the camera position unless maxRelV is extremely low (e.g., <1 in most cases).
+ - Option to save the previously used rotation in stationary camera mode when no target is selected (prevents semi-random initial views, default: disabled).
+ - Add keybinding options for free move keys (escape cancels keybinding).
+
+v1.16.4
+ - Recompiled with KSP 1.12 assemblies.
+
+v1.16.3
+Bugfixes:
+ - Fix potential NRE when enabling IVA mode.
+ - Abort trying to enter IVA mode if it throws an exception.
+ - Don't add atmospheric controllers to objects that already have one.
+
+v1.16.2
+Bugfixes:
+ - Respect random mode when manually activating the camera.
+ - Exit IVA mode more reliably to avoid broken flickering camera.
+ - Performance optimisations to avoid GC allocations.
+
+v1.16.1
+Bugfixes:
+ - Fix NRE when vessel is destroyed before switching to IVA mode.
+ - Don't immediately re-enter IVA mode if manually switched out of it.
+
+v1.16.0
+Bugfixes:
+ - Try to reacquire a dogfight target if reverted due to a null dogfight target and Auto-Enable for BDArmory is enabled.
+ - Limit the type of vessels atmospheric audio gets added to to avoid saturating KSP's SoundManager channels unnecessarily.
+ - Fix indexing bug in 'pathing mode' (note: the example path is still weird).
+Improvements:
+ - Add sliders for configuring chances of 'random mode'.
+ - Add IVA view to 'random mode' (if the vessel has a cockpit, otherwise it counts as dogfight mode).
+ - In 'random mode', use the stationary camera when switching to views of a target that is close to the ground or about to crash.
+ - Improve the positioning of the stationary camera when switching to views of a target that is close to the ground or about to crash.
+ - Recover better from something else stealing the camera parent.
+
+v1.15.4
+Bugfixes:
+ - Exclude music volume levels from volumes based on distance from the camera.
+Improvements:
+ - Migrate non-static config files to PluginData to avoid invalidating the ModuleManager cache (should give slightly faster start-up times).
+
+v1.15.3
+Bugfixes:
+ - Disable slider discretisation when keypad control is enabled.
+ - Properly correct for time-warp under almost all conditions for dogfight mode. (It only gets the offset wrong between 70km and 100km above Kerbin and similarly on other bodies.)
+ - Eliminate pretty much all graphical glitches caused by floating origin and Krakensbane velocity shifts in dogfight mode.
+Improvements:
+ - Change the keypad move/zoom speeds to sliders for easier access.
+ - Add option to turn on lots of debugging.
+
+v1.15.2
+Bugfixes:
+ - Don't touch the camera when we're not in control of it!
+ - Use TimeWarp times instead of Time times for velocity calculations.
+Improvements:
+ - Allow switching into and out of IVA and Map modes.
+
+v1.15.1
+Bugfixes:
+ - Fix missing config file load/save bug.
+ - Update all version numbers properly.
+
+v1.15.0
+- A bunch of bugfixes.
+- Save settings properly.
+- Death camera: when in dogfight mode, temporarily follow the explosion when the followed plane gets destroyed.
+- Adjustable lerp (interpolation) rate for dogfight mode.
+- Adjustable roll amount (based on the followed craft) for dogfight mode.
+- Smoother transitions into dogfight mode.
+- Auto-enable for BDArmory.
+
+v1.14.0
+- Compatibility with KSP 1.9.x
+
+v1.13.0
+- Compatibility with KSP 1.8.x
+
+v1.12.0
+- Compatibility with KSP 1.7.x
+
+v1.11.0
+- Compatibility with KSP 1.5.x
+
+v1.10.0
+- Compatibility with KSP 1.4.x
+
+v1.9.0
+- Compatibility with KSP 1.3.1
+- Fixing Dogfighting camera for BDArmory
+
+v1.8.0
+- Compatibility with KSP 1.2.2 and KSP 1.2.9 BETA
+- Fixing isssue when reverting the camera
+
+v1.7.0
+- Compatibility with KSP 1.2.1
+
+v1.6.0
+- 1.1 compat and path tool
+- fix loading paths/deleting paths, fix deleting selected key
+- set spatial blend to 3d audio
+
+v1.5.1
+- Dogfight mode auto-resets when a new target is selected or active vessel is switched
+- Auto targeting option with BDArmory AI pilot target
+
+v1.5
+- Dogfight chase mode
+- Autozoom margin slider
+
+v1.4.2
+- Slight UI tweak
+- Incremental buttons for manual offset
+
+v1.4.1
+- Ability to save persistant settings
+- Fixed part audio too loud when stationary
+- Fixed inability to select auto position without unchecking manual position
+- Stopped sonic boom being played when vessel breaks sound barrier after wavefront already passed camera
+- Increased sonic boom volume
+- Temporary fix for silent atmospheric audio when >~600m/s
+
+v1.4
+- Atmospheric audio effects (toggleable)
+- Camera shake (adjustable)
+
+v1.3
+- 1.0+ Compatibility
+- Manual camera position now persists after resetting camera
+- Bind activate/reset key by recording instead of typing button name
+- Camera no longer resets when pausing
+
+
+v1.2
+- Added Orbit frame of reference
+- Fixed issues with setting camera offset to vertically launching vehicles
+
+v1.1
+- 0.25 update
+- Added ability to set location -before- activating camera
+- Fixed text fields in GUI (it won't fight you when entering negatives or decimals)
+- Fixed Toolbar Icon
+- Greatly reduced motion of stationary camera when vessel is accelerating/turning
+
+
+v1.0
+- Initial release

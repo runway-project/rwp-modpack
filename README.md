@@ -32,6 +32,10 @@ This modpack makes use of content from these mods, under their respective licens
 
 [BDArmory-Extended](https://github.com/BrettRyland/BDArmory-Extended) by SuicidalInsanity is distributed under a [Creative Commons CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/) license.
 
+### CameraTools
+
+[Camera Tools](https://github.com/BrettRyland/CameraTools) is distributed under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html) license.
+
 ### CommunityResourcePack
 
 [CommunityResourcePack](https://github.com/UmbraSpaceIndustries/CommunityResourcePack) is distributed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0)](http://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)
@@ -59,6 +63,10 @@ Interstellar Fuel Switch is distributed under the [Creative Commons NonCommercia
 ### ModuleManager
 
 [ModuleManager](https://github.com/sarbian/ModuleManager) is distributed under a Creative Commons sharealike license.
+
+### PhysicsRangeExtender
+
+[Physics Range extender](https://github.com/jrodrigv/PhysicsRangeExtender) is distributed under the [Unlicense](http://unlicense.org).
 
 ### Shabby
 
