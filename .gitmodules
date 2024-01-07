@@ -19,3 +19,6 @@
 [submodule "mods/AirplanePlus"]
 	path = mods/AirplanePlus
 	url = git@github.com:runway-project/AirplanePlus.git
+[submodule "mods/B9-PWings-Modified"]
+	path = mods/B9-PWings-Modified
+	url = git@github.com:SuicidalInsanity/B9-PWings-Modified.git
