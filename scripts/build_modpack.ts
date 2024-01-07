@@ -199,15 +199,26 @@ async function main() {
 		await copyModFiles( await getModMetadata(mod_name) )
 	}
 
+	console.time('rwp_assets')
+
+	// Copy over the RWP assets and parts
+	const rwp_asset_paths = await glob(`src/**/*.{${include_file_extensions.join(',')}}`)
+
+	for( const path of rwp_asset_paths ) {
+		await copy( path, path.replace('src\\', 'dist/RWP_Modpack/GameData/RWP/'), {overwrite: true} )
+	}
+
 	// Copy the readme
 	await copy('README.md', 'dist/RWP_Modpack/README.md', {overwrite: true})
+
+	console.timeEnd('rwp_assets')
 
 	console.log(`Creating zip folder...`)
 	console.time('zip')
 
 	// Zip up the RWP folder
-	await zipFolder( 'dist/RWP_Modpack', `dist/RWP_Modpack-v${VERSION}.zip` )
-	
+	//await zipFolder( 'dist/RWP_Modpack', `dist/RWP_Modpack-v${VERSION}.zip` )
+
 	console.timeEnd('zip')
 	console.timeEnd('build')
 

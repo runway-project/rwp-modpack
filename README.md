@@ -22,7 +22,7 @@ This modpack makes use of content from these mods, under their respective licens
 
 ### B9PartSwitch
 
-[B9PartSwitch] is distributed under the [LGPL v3.0 License](http://www.gnu.org/licenses/lgpl-3.0.en.html)
+[B9PartSwitch](https://github.com/blowfishpro/B9PartSwitch) is distributed under the [LGPL v3.0 License](http://www.gnu.org/licenses/lgpl-3.0.en.html)
 
 ### BDArmory
 
@@ -43,6 +43,10 @@ This modpack makes use of content from these mods, under their respective licens
 ### DockRotate
 
 [DockRotate](https://github.com/peteletroll/DockRotate) is distributed under the MIT License.
+
+### Firespitter
+
+[Firespitter](https://github.com/snjo/Firespitter) is by Andreas Aakvik Gogstad (Snjo).
 
 ### Harmony
 
