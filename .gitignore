@@ -11,4 +11,5 @@ node_modules/
 
 src/**/*.fbx
 src/**/export
-src/parts/podracer/S5R5 Assets.spp
+src/parts/podracer/src/ab_form_factor.spp
+src/**/*_TMP_EXPORT.blend
