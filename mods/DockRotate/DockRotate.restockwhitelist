@@ -1,6 +1,0 @@
-// Whitelist Radial Attachment Point and Oscar B model
-// so the parts load with restock installed
-
-Squad/Parts/Utility/radialAttachmentPoint/
-Squad/Parts/FuelTank/fuelTankOscarB/
-

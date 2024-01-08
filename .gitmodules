@@ -22,3 +22,6 @@
 [submodule "mods/B9-PWings-Modified"]
 	path = mods/B9-PWings-Modified
 	url = git@github.com:SuicidalInsanity/B9-PWings-Modified.git
+[submodule "mods/DockRotate-PwingFork"]
+	path = mods/DockRotate-PwingFork
+	url = git@github.com:SuicidalInsanity/DockRotate-PwingFork.git

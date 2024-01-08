@@ -217,7 +217,7 @@ async function main() {
 	console.time('zip')
 
 	// Zip up the RWP folder
-	//await zipFolder( 'dist/RWP_Modpack', `dist/RWP_Modpack-v${VERSION}.zip` )
+	await zipFolder( 'dist/RWP_Modpack', `dist/RWP_Modpack-v${VERSION}.zip` )
 
 	console.timeEnd('zip')
 	console.timeEnd('build')
