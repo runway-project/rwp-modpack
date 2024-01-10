@@ -7,3 +7,4 @@ Parts/Command/F23T/**
 Parts/Command/hammerhead/**
 Parts/Command/podracercockpit/**
 Parts/Command/VaguelyFrench/**
+Parts/Command/su34/**
