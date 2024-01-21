@@ -23,9 +23,9 @@ import {normalize, join} from 'path/posix'
 import archiver from 'archiver'
 
 /** Modpack version. Update this when content changes. */
-const VERSION = '1.0.0'
+const VERSION = '1.0.1'
 
-const include_file_extensions = ['png', 'dds', 'cfg', 'mu', 'dll', 'version', 'txt', 'md']
+const include_file_extensions = ['png', 'dds', 'tga', 'jpg', 'jpeg', 'cfg', 'mu', 'dll', 'version', 'txt', 'md']
 
 type FileList = string[] | null
 

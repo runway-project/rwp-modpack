@@ -1,4 +1,73 @@
-﻿v1.6.8.0
+﻿v1.6.9.0
+IMPROVEMENTS / FIXES
+- UI:
+	- Fix the alternate (hidden UI) window locations (for scores and vessel switcher) not being saved correctly.
+- General:
+	- New texture for 1.25m radomes.
+	- Add a max distance threshold setting to Team Icons.
+	- Fix "Camera Switch: Incl. Missiles" not switching to missiles about to hit their target.
+- AI / WM:
+	- Add new Orbital AI part for spacecraft in orbit:
+		- The Orbital AI will use orbital maneuvers to close within gun range of the target to fire weapons. It will also automatically fire missiles when able.
+		- The AI will maneuver at the Maneuver Speed setting and once within gun range try to fire guns while at the Strafe Speed setting.
+		- It will evade missiles based on the countermeasure settings on the Weapons Manager and evade gunfire using AI settings similar to those on the Pilot AI.
+		- When spawned at orbital altitudes using the BDA Vessel Spawner, craft with the Orbital AI will be automatically spawned into orbit (other options for orbital spawning are cheat menu and HyperEdit mod).
+		- Orbital AI is adapted from the StockCombatAI (KCS) mod, check it out here https://github.com/Halbann/StockCombatAI/releases!
+	- Base the Immelmann turn pitch direction on the local pitch angular velocity (i.e., pitch down if already rotating that way — fixes the pitch oscillation behaviour when targeting an opponent behind the craft while inverted near terrain).
+	- Don't summon the NaN-Kraken when the post-terrain avoidance cool-down is 0.
+	- Tightened up 'on target' threshold for dumbfiring missiles.
+	- Perform banked turns when the target is behind us at long range and extending is allowed instead of Immelmann turns or turning directly to target. Threshold is clamp(8 * max speed, 1000, 4000).
+	- Pilot AI turns will now turn harder (using Max AoA setting) towards the notch direction the closer the missile is to impact.
+	- Factor the user-defined steer limit into the turn radius calculations.
+	- Use a more gentle take-off slope for the initial take-off.
+	- Add an Evasion Min Range Threshold option to only trigger evasion from an attacker using guns when they're beyond that distance.
+	- If enemies are detected nearby but beyond gun range and we're not aiming, perform nonlinear (evasive) weaving to avoid long-range sniping.
+	- Make the gun range slider more tolerant to following increases in the max gun range.
+- Detectors:
+	- Can now set targeting camera slew speed using "traverseRate" field in ModuleTargetingCamera.
+	- Improve Targeting Camera ability to track moving/flying targets.
+- Weapons:
+	- Fixes for initial bullet placement and simulated hit position when Krakensbane is not active.
+	- Account for the initial bullet placement in the bullet traveled distance.
+	- Fixes for aiming reticles of guns (both fixed and turrets) when using MouseAimFlight.
+	- Show where aimer lines in the SPH are blocked and by what.
+	- Add Deploy toggle to see where weapons with deploy animations will point when deployed vs retracted (e.g. M230 chaingun).
+	- Fix lasers using wrong armor thickness value for damage reduction calcs.
+	- Fixes point defense/APS turrets not engaging incoming missiles.
+	- Fix proximity/flak/beehive ammo detonation timing when used in orbit.
+	- Missiles:
+		- Add new Orbital guidance option for Modular Missiles.
+			- Missile will attempt to intercept orbital target at the user-set Max Speed value.
+			- homingType = orbital replaces homingType = RCS in missile configuration files (BDA is still backwards-compatible with homingType = RCS).
+		- Improvements to modular missile AAM guidance types so that they work in orbit.
+		- Fix for HEKV launching unguided in non-ideal situations.
+		- Fix clustermissiles launching copies of themselves instead of submunitions.
+		- Fix clustermissiles not respecting submunition trigger distance.
+		- Fix clustermissiles acting like reloadable missiles when not set up for reloading.
+		- Fix Guidance Type None missiles not holding course.
+		- GPS missiles now require a target cam or radar lock for GPS coords.
+		- INS missiles can now use either radar or IRST tracking.
+		- INS missiles now have datalink capability for mid-flight target coordinate updates (uses gpsUpdates field), update rate clamped to Radar/IRST scan speed.
+		- ECM can now jam GPS/INS datalink if missile within hostile ECM AoE.
+		- Fix error with Inertial guidance target prediction for non-updating missiles.
+		- Fix Missiles having 10 armor instead of 2.
+		- Fix SARH missiles that relock to a new target not updating their target vessel.
+		- Changed missile missed check, missiles now check if they have come within 400m, are post-thrust, or are more than 1km behind target, and have exceeded a grace period of maxTurnRateDPS/15.
+- Countermeasures:
+	- Add vessel's velocity to chaff ejection particle effect.
+	- Use vessel acceleration instead of velocity for chaff decoy factor calculation when in space.
+	- Add option in WM's CM settings for auto-deploying CMs when not in guard mode (e.g., for manual combat).
+- Vessel Mover / Spawning:
+	- Check for outdated loadMeta files when refreshing the craft list in the vessel selection window and update them since KSP doesn't update them when you save your craft!
+	- Fix the spawn point selection sometimes not registering.
+	- Vessels with an orbital AI that are spawned at safe orbital altitudes are spawned into circular orbits. Vessels are spawned pointing away from each other.
+	- Increase maximum spawn distance to 200km.
+	- Add a "bubble shuffle" to the waiting craft in continuous spawning to increase the randomness of the spawn order.
+- ModIntegration:
+	- Fixes for inhibiting CameraTools when initial spawning during continuous spawning and disable auto-switching to newly spawned craft joining the competition.
+	- Provide helpers for CameraTools so that the camera can aim at missiles' targets (requires CameraTools v1.31.0).
+
+v1.6.8.0
 IMPROVEMENTS / FIXES
 - General:
 	- Add tracking of 'named modules' (from non-dependency DLLs) to the VesselModuleRegistry.
@@ -24,7 +93,7 @@ IMPROVEMENTS / FIXES
 	- Abrams Turret maxDeviation decreased to 0.1; Abrams bullet spread should reliably hit a tank-sized target from 2km again.
 	- Missiles:
 		- Add new Inertial guidance mode.
-		  - Add new 'inertialDrift' missileLauncher field for INS drift, in meters/sec.
+			- Add new 'inertialDrift' missileLauncher field for INS drift, in meters/sec.
 		- Have torpedoes head to last known contact point and start circling it, instead of current sink to bottom behavior.
 		- MultiMissileLauncher deploy anim toggle now affects symmetry twins.
 		- Fix various NullReferenceExceptions when trying to use Modular Missiles.

@@ -6,8 +6,9 @@ import json
 import sys
 from collections import Counter
 from pathlib import Path
+from typing import Union
 
-VERSION = "1.1"
+VERSION = "1.2"
 
 parser = argparse.ArgumentParser(description="Parse results.json of a N-choose-K style tournament producing a table of who-beat-who.", formatter_class=argparse.ArgumentDefaultsHelpFormatter, epilog="Note: this also works on FFA style tournaments, but may not be meaningful.")
 parser.add_argument('results', type=str, nargs='?', help="results.json file to parse.")
@@ -20,12 +21,20 @@ if args.version:
     print(f"Version: {VERSION}")
     sys.exit()
 
+def naturalSortKey(key: Union[str, Path]):
+    if isinstance(key, Path):
+        key = key.name
+    try:
+        return int(key.rsplit(' ')[1])  # If the key ends in an integer, split that off and use that as the sort key.
+    except:
+        return key  # Otherwise, just use the key.
+
 if args.results is None:
     logsDir = Path(__file__).parent / "Logs"
     if logsDir.exists():
         tournamentFolders = list(logsDir.resolve().glob("Tournament*"))
         if len(tournamentFolders) > 0:
-            tournamentFolders = sorted(list(dir for dir in tournamentFolders if dir.is_dir()))
+            tournamentFolders = sorted(list(dir for dir in tournamentFolders if dir.is_dir()), key=naturalSortKey)
         if len(tournamentFolders) > 0:
             args.results = tournamentFolders[-1] / "results.json"  # Results in latest tournament dir
 
