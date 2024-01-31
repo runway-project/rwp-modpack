@@ -2,8 +2,10 @@ Parts/Aero/Intakes/**
 Parts/Aero/WingAdapter/**
 Parts/Command/chiselcockpit/**
 Parts/Command/f14cockpit/**
+Parts/Command/F15T/**
 Parts/Command/F22T/**
 Parts/Command/F23T/**
+Parts/Command/f104cockpit/**
 Parts/Command/hammerhead/**
 Parts/Command/podracercockpit/**
 Parts/Command/VaguelyFrench/**
