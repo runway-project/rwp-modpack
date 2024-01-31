@@ -1,39 +1,59 @@
-﻿IMPROVEMENTS / FIXES
+﻿v1.6.10.0
+IMPROVEMENTS / FIXES
 - General:
 	- Fix Krakensbane adjustments when the active vessel dies.
-	- Fix tracer visuals when the active vessel dies.
-	- Adjust timing and conditions for auto-camera switching to and away from missiles.
-	- Battle damage fuel leak rates now scale by (bullet caliber)^2, instead of (bullet caliber). Fuel leak rates for 20mm caliber remain the same, calibers higher and lower than 20mm will now have higher and lower leak rates, respectively.
 	- Make sure various pooled objects are disabled when leaving the flight scene.
-	- Fix missing resource for the Bubble CM.
+	- Battle damage fuel leak rates now scale by (bullet caliber)^2, instead of (bullet caliber). Fuel leak rates for 20mm caliber remain the same, calibers higher and lower than 20mm will now have higher and lower leak rates, respectively.
+	- Fixes for Kerbal Safety not always detecting EVA kerbals.
 - UI:
+	- Updated Chinese localization thanks to user Marv1n-M.
 	- Fix part filtering by search terms in the editors.
+	- Adjust timing and conditions for auto-camera switching to and away from missiles.
+	- Fix tracer visuals when the active vessel dies.
 	- New Opacity option in BDA Team Icons to set icon opacity.
-	- Adds CASE ammo explosion radii visualizer, enable via F3.
+	- Adds CASE ammo explosion radii visualizer in the editors, enable via F3.
 	- Continuous Spawn now shows lives remaining in the Vessel Switcher GUI.
 	- Add a UI scaling option for BDA's windows.
 	- Improve the logarithmic scaling in the radar windows.
+	- Add a 'withZero' parameter to semi-log sliders that allows them to include 0 and uses lower precision for the smallest range.
+	- Add a 'GUIUtils.HorizontalSemiLogSlider' for simplifying horizontal sliders for semi-log float ranges outside of PAWs.
+	- Add a fractional component to the precision of semi-log sliders for rounding, e.g., sigFig = 1.5f gives '..., 8.5, 9, 9.5, 10, 15, 20, ...'. Switch the spawn distance slider to use this.
+	- Add a power-law float range type and 'GUIUtils.HorizontalPowerSlider' for simplifying horizontal sliders for power-law float ranges outside of PAWs.
 - AI / WM:
 	- Add new "Kinematic Msl Evasion" toggle to Pilot AI under the evasion settings. When this is enabled the AI will evaluate the best maneuver to defeat a beyond-visual-range (BVR) missile using only kinematic maneuvers. The Time to Impact Before Evade setting on the weapons manager should be set to a high value when this evasion option is enabled. Maneuvers the AI will use are:
 		- Crank - Fly at an angle to the target, while still maintaining radar lock.
 		- Beam/Notch - Fly perpendicular to the missile.
 		- Turn away/Turn cold - Fly away from the missile.
 		- Notch & dive - This is the standard AI behavior if this toggle is disabled. It is also used if the toggle is enabled and the AI is within lethal range of the missile.
-	- Invert the roll target when the fly-to direction is below and behind the craft within the Immelmann turn angle.
+	- Invert the roll target when the fly-to direction is below and behind the craft within the Immelmann turn angle (fixes death spirals).
 	- Fix automatic gun range adjustments in the WM again.
 	- Prevent Orbital AI from changing attitude while launched missile is still near spacecraft.
-	- Add Smoke CM timing/interal/repetition settings.
-	- Fix the missile evasion direction using the wrong reference frame.
-	- Automatically disable precision input mode when auto-tuning (UI element doesn't switch though).
+	- Add Smoke CM timing/interval/repetition settings.
+  - Fix the missile evasion direction using the wrong reference frame.
+  - Automatically disable precision input mode when auto-tuning (KSP's UI element doesn't switch though).
+	- Add a slider for prioritizing using brakes to slow down when braking is allowed.
+- Armor / Hull:
+  - Radar stealth coatings - can now apply radar absorbent/reflective materials on a per-part basis.
+	  - Armor coatings less than 10mm thick will provide lessened benefits.
+  - Adds new radarReflectivity field to Armor materials to specify degree of radar absorbtion/reflectivity of the armor.
+  - Adds new radarMod field to Hull materials to set degree of radar return off unarmored parts.
+  - Adds new Radar Absorbent Coating armor type.
+  - Adds new Radar Absorbent Foam hull material.
+- Detectors / Countermeasures:
+	- Fix missing resource for the Bubble CM.
+	- Fix targeting cameras not being able to track targets.
 - Weapons:
 	- Corrections to penetration and ricochet velocity changes and ricochet positions.
 	- Stop APS firing at dead missiles.
-	- 'subProjectileCount' has been deprecated and replaced with 'projectileCount'; this specifies number of pellets per shot (for shotguns, etc) to make it more intuitive. Existing shotgun-type weapons will need to update their bulletDefs.
+	- 'subProjectileCount' has been deprecated and replaced with 'projectileCount'; this specifies the number of pellets per shot (for shotguns, etc.) to make it more intuitive. Existing shotgun-type weapons will need to update their bulletDefs.
 	- The subMunitionType field for beehive ammo now uses the syntax of "ammotype; quantity" (e.g. subMunitionType = 35x228AHEADPellet; 30) with number of projectiles released on detonation set here instead of the subMunition's bulletDef.
+		- BDA will try to automatically detect and adjust old beehive ammo types, but mods should update their bulletDefs accordingly.
 	- Fix the aiming reticles of guns (fixed and turrets) and auto-proxy-tracking when using MouseAimFlight (again).
+	- Add new projectileTTL field to bulletDefs, use to set time in seconds beehive round subprojectiles will persist for. Optional, defaults to 0.5. 
+	- Switch the gun range sliders to use a power-law slider instead of a semi-log slider to keep typical ranges closer to the centre of the slider.
 	- Missiles:
 		- Fix issue with Rotary Rails trying to use missiles that have previously been blown off from combat damage.
-		- Fix issue with MultiMissilelauncher Turrets throwing an NRE when AI firing.
+		- Fix issue with MultiMissileLauncher Turrets throwing an NRE when AI firing.
 		- Fix mass changes of missiles that decouple boosters and add missile mass debug telemetry.
 		- Fix radar and heat targeting leading targets excessively (most apparent in orbit).
 		- Fix missile drag curve having negative drag at ~25 deg AoA.
@@ -45,7 +65,7 @@
 		- Fix radar missiles not locking and firing until well within their max engagement range.
 		- Add new dragArea configuration variable for missiles to set reference area for drag independently from the lift area. If not set, this defaults to the liftArea setting in the missile configuration file.
 		- Fix missiles ignoring guns with priority.
-		- Added missile g-limiting. Now you can set a missile maximum g-limit using the "gLimit" field. Additionally a "gMargin" field exists which allows you to specify an allowable margin the missile can miss by to optimize drag. I.E. the missile is allowed to pull only gLimit - gMargin if pulling gLimit will result in too much drag.
+		- Added missile g-limiting. Now you can set a missile maximum g-limit using the "gLimit" field. Additionally a "gMargin" field exists which allows you to specify an allowable margin the missile can miss by to optimize drag. I.e., the missile is allowed to pull only gLimit - gMargin if pulling gLimit will result in too much drag.
 		- Corrected pronav and augpronav normal acceleration using the g-limiting feature.
 		- Improved missile turning behavior, turns should be slightly smoother overall.
 		- Added Kappa guidance, an optimal type of midcourse guidance for in-atmosphere missiles. This re-uses the LoftAngle, LoftMaxAltitude and LoftRangeOverride fields, though LoftRangeOverride is now the range where the missile will switch from lofting to the midcourse guidance. Introduces a new field, "kappaAngle" which is a trajectory shaping angle, higher values mean a steeper terminal trajectory.
@@ -55,8 +75,12 @@
 - Competition:
 	- Add an option for the continuous spawn central point to follow the centroid of surviving craft (biased back towards the original spawn point).
 	- Add an option to automatically resume continuous spawn and to automatically shutdown KSP when continuous spawn ends due to having fewer than 2 craft left.
-	- Update the continuous spawn log parser to handle multiple files, either separately or combined.
+	- Update the continuous spawn log parser to handle multiple files, either separately or combined, and to only show non-zero columns.
 	- Bias the continuous spawn's "bubble shuffle" to prioritise craft with fewer spawns.
+	- Hide the ALIVE / DEAD string in continuous spawn when the UI is hidden.
+	- Delay spawning craft in continuous spawning while the death cam is active to avoid lag during that shot.
+- RWP:
+	- Add RWP S6R1 specific overrides.
 
 v1.6.9.0
 IMPROVEMENTS / FIXES
@@ -307,7 +331,7 @@ IMPROVEMENTS / FIXES
 	- Missiles:
 		- Add option (in Show Missile and Countermeasure Settings) to allow missiles to be fired from their full dynamic launch range instead of static launch range. 
 		- Add trigger range setting for cluster missile submunition launch.
-		- Fix MultiMissilelaunchers resetting detonation Distance.
+		- Fix MultiMissileLaunchers resetting detonation Distance.
 		- Fix MML "TNT Mass Equivalent = -0.0018726" PAW label.
 		- Fixed Missiles with ModuleMissileRearm improperly launching.
 		- Fixed MMLs resetting detonation distance.
@@ -1026,7 +1050,7 @@ IMPROVEMENTS / FIXES
 		- Fix MMLs unable to fire if using salvos smaller than total launcher count.
 		- MML salvoes now add one missile away per target fired on, not just primary target.
 		- MML missiles no longer labeled as [vesselname] debris when using Missile icons and Vessel Label UI Icon options.
-		- Fix mass for MultiMissilelauncher rails.
+		- Fix mass for MultiMissileLauncher rails.
 
 v1.5.3.1
 IMPROVEMENTS / FIXES

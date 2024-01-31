@@ -6,7 +6,7 @@ import re
 import sys
 from pathlib import Path
 
-VERSION = "3.0"
+VERSION = "3.1"
 
 parser = argparse.ArgumentParser(description="Log file parser for continuous spawning logs.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("logs", nargs='*', help="Log files to parse. If none are given, the latest log file is parsed.")
@@ -213,10 +213,11 @@ if len(data) > 0:
 
         name_length = max([len(craft) for craft in summary])
         field_lengths = {field: max(len(fields_short[field]) + 2, 8) for field in fields}
-        print(f"Name{' '*(name_length-4)}     score" + "".join(f"{fields_short[field]:>{field_lengths[field]}}" for field in fields))
+        fields_to_show = [field for field in fields if not all(summary[craft][field] == 0 for craft in summary)]
+        print(f"Name{' '*(name_length-4)}     score" + "".join(f"{fields_short[field]:>{field_lengths[field]}}" for field in fields_to_show))
         for craft in sorted(summary, key=lambda c: summary[c]["score"], reverse=True):
             print(f"{craft}{' '*(name_length-len(craft))}  {summary[craft]['score']:8.2f}" +
-                  "".join(f"{summary[craft][field]:>{field_lengths[field]}.0f}" if 'accuracy' not in field else f"{summary[craft][field]:>{field_lengths[field]-1}.1f}%" for field in fields))
+                  "".join(f"{summary[craft][field]:>{field_lengths[field]}.0f}" if 'accuracy' not in field else f"{summary[craft][field]:>{field_lengths[field]-1}.1f}%" for field in fields_to_show))
 
         if not args.no_file:
             # Write results to file
