@@ -1,4 +1,60 @@
-﻿v1.6.10.0
+﻿v1.6.11.0
+IMPROVEMENTS / FIXES
+- General:
+	- Recompile the shaders on an older version of Unity so that they're compatible with KSP v1.9.1 and later.
+	- Fix false positives of Krakensbane being active on vessel switches.
+	- Add a part Tree Hierarchy visualizer to the BDA Craft Utilities Tool for checking part offset.
+- UI:
+	- Make the time-scaling slider visible without needing to activate time override.
+	- Extend the camera-switch slider to up to 15s.
+- AI / WM:
+	- Clamp the vertical adjustment of the fly-to position to at most half the distance to the target (should fix the issue of being unable to attack targets directly below).
+	- Add a slider for biasing the Immelmann pitch direction when not close to terrain/min altitude.
+	- Add a slider for the initial roll-relevance and preserve the best roll-relevance between auto-tuning runs.
+- Competition:
+	- Add "Parts lost to asteroids" to the continuous spawn tournament score logs and parser.
+	- Fix world switching for auto-resuming continuous spawn tournaments.
+	- Make the "Auto-Quit On Tournament End" option apply whenever it's visible.
+	- Suppress the "Dumping scores..." messages unless competition debugging is enabled.
+- Game Modes:
+	- Add Gun Game game option to the Mutator GameMode - craft progress through a list of mutators (weapon changes or otherwise) every time they score a kill. Ideally used with Continuous Spawn.
+	- Asteroid Field:
+		- Adjust the anomalous attraction strengths to scale better with typical asteroid radii.
+		- Add an inter-asteroid repulsion at close ranges to prevent asteroids clumping too much.
+		- Make the asteroids nigh indestructible so that they don't thin out over time.
+- Weapons:
+	- Reduce ECPerShot cost of electrolasers.
+	- Heatrays now check for part occlusion.
+	- Fix non-damaging lasers (gravity guns, etc.) from not scoring in competition.
+	- Fix the luminance of tracers on pooled bullets not being reset (not every bullet is a tracer now).
+	- Lasers now deal damage to buildings.
+	- Missiles:
+		- Fix Missile Exhaust FX issue.
+- RWP:
+	- Add RWP override settings (in RWP_settings.cfg) for automatically enabling/disabling RWP options when the RWP toggle is toggled or the RWP slider is adjusted.
+		- Settings adjusted when RWP is enabled aren't saved, but can be manually added to the RWP_settings.cfg file.
+		- Settings adjusted when RWP is disabled are saved to settings.cfg as usual and serve as the base that the RWP settings override.
+		- Overrides for round 0 are global overrides and are applied first before round specific overrides are applied.
+		- Toggling the RWP toggle or moving the slider first reverts settings to the non-RWP values, then applies the global and round-specific RWP overrides.
+		- For convenience, a few settings are excluded from being reverted: settings section toggles and most spawn settings. Also, inf fuel / inf EC currently aren't affected.
+		- The defaults for the RWP_settings.cfg file will be saved when settings are first saved and changes made to the file override the defaults.
+		- Default RWP settings for previous rounds and the upcoming S6R2 have been added.
+	- Restrict the RWP slider to only include rounds that have overrides and move it to the top of the section to avoid issues with layout changes while adjusting the slider.
+
+v1.6.10.1
+IMPROVEMENTS / FIXES
+- UI:
+	- Updated German localisation from EzBro.
+	- Fix some localisation tags and duplicates.
+- AI / WM:
+	- Don't reset PID values to stored auto-tuning ones when switching the clamped/unclamped toggle.
+	- Add an auto-tuning summary line to the AI GUI when auto-tuning is not running (when there's something to show).
+- Weapons:
+	- Fix rockets detonating too early.
+	- Missiles:
+		- Fix missiles not having their exhaust and boost FX.
+
+v1.6.10.0
 IMPROVEMENTS / FIXES
 - General:
 	- Fix Krakensbane adjustments when the active vessel dies.
@@ -29,16 +85,16 @@ IMPROVEMENTS / FIXES
 	- Fix automatic gun range adjustments in the WM again.
 	- Prevent Orbital AI from changing attitude while launched missile is still near spacecraft.
 	- Add Smoke CM timing/interval/repetition settings.
-  - Fix the missile evasion direction using the wrong reference frame.
-  - Automatically disable precision input mode when auto-tuning (KSP's UI element doesn't switch though).
+	- Fix the missile evasion direction using the wrong reference frame.
+	- Automatically disable precision input mode when auto-tuning (KSP's UI element doesn't switch though).
 	- Add a slider for prioritizing using brakes to slow down when braking is allowed.
 - Armor / Hull:
-  - Radar stealth coatings - can now apply radar absorbent/reflective materials on a per-part basis.
-	  - Armor coatings less than 10mm thick will provide lessened benefits.
-  - Adds new radarReflectivity field to Armor materials to specify degree of radar absorbtion/reflectivity of the armor.
-  - Adds new radarMod field to Hull materials to set degree of radar return off unarmored parts.
-  - Adds new Radar Absorbent Coating armor type.
-  - Adds new Radar Absorbent Foam hull material.
+	- Radar stealth coatings - can now apply radar absorbent/reflective materials on a per-part basis.
+		- Armor coatings less than 10mm thick will provide lessened benefits.
+	- Adds new radarReflectivity field to Armor materials to specify degree of radar absorbtion/reflectivity of the armor.
+	- Adds new radarMod field to Hull materials to set degree of radar return off unarmored parts.
+	- Adds new Radar Absorbent Coating armor type.
+	- Adds new Radar Absorbent Foam hull material.
 - Detectors / Countermeasures:
 	- Fix missing resource for the Bubble CM.
 	- Fix targeting cameras not being able to track targets.
@@ -72,6 +128,7 @@ IMPROVEMENTS / FIXES
 		- Fixed missile contact detonation logic, a bug was present which lead to inaccurate detection of missile contact.
 		- Improved AAMLoft performance against maneuvering targets.
 		- EMP warheads only detonate when armed and no longer do additional damage.
+		- Add dumbTerminalGuidance bool (default true) to missiles; setting dumbTerminalGuidance = false will have missiles continue to use primary guidance until terminal targeting mode has a lock, vs immediately switching to terminal guidance the moment the distance trigger is satisfied.
 - Competition:
 	- Add an option for the continuous spawn central point to follow the centroid of surviving craft (biased back towards the original spawn point).
 	- Add an option to automatically resume continuous spawn and to automatically shutdown KSP when continuous spawn ends due to having fewer than 2 craft left.

@@ -1,0 +1,3 @@
+Note:
+- Unity doesn't maintain backwards compatibility for shader bundles, so for shader bundles to work on KSP 1.9.1 and onwards, they need to be created with Unity 2019.2.2f1 or earlier.
+- However, Unity has broken 2019.2.2f1 and probably won't fix it, so using Unity 2018.4.36f1 to generate new shader bundles seems to be the best option.
