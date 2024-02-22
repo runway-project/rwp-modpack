@@ -10,5 +10,3 @@ Parts/Command/hammerhead/**
 Parts/Command/podracercockpit/**
 Parts/Command/VaguelyFrench/**
 Parts/Command/su34/**
-Parts/Command/f86canopy/**
-Parts/Command/fwcanopy/**

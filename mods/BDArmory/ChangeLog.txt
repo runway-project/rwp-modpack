@@ -1,4 +1,14 @@
-﻿v1.6.11.0
+﻿v1.6.11.1
+IMPROVEMENTS / FIXES
+- General:
+	- Fix Pwing HP scaling for large pwings being used as fuselages.
+	- Gravity Gun moved to the Lasers tab.
+- RWP: 
+	- Fix PWing Control Surface Offset angle resetting on one side.
+- Weapons:
+	- Fix lasers being able to fire as long as > 0 EC is present.
+
+v1.6.11.0
 IMPROVEMENTS / FIXES
 - General:
 	- Recompile the shaders on an older version of Unity so that they're compatible with KSP v1.9.1 and later.
