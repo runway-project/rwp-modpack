@@ -1,3 +1,4 @@
+
 ﻿v1.6.11.1
 IMPROVEMENTS / FIXES
 - General:
@@ -7,7 +8,10 @@ IMPROVEMENTS / FIXES
 	- Fix PWing Control Surface Offset angle resetting on one side.
 - Weapons:
 	- Fix lasers being able to fire as long as > 0 EC is present.
-
+  - Add bulletLuminance field for setting non-tracer brightness.
+- ModIntegration:
+	- Fix the type to unbox MidChordSweep to.
+  
 v1.6.11.0
 IMPROVEMENTS / FIXES
 - General:
