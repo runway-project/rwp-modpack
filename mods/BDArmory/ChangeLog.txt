@@ -1,4 +1,88 @@
-﻿1.6.12.0
+﻿IMPROVEMENTS / FIXES
+- General:
+	- Fixes for post-build event instructions on Windows to allow for different 7zip executables.
+	- Downgrade using defaults for missing bulletinfo fields from an error to a warning.
+- UI:
+	- Updated Chinese localisation thanks to user Marv1n-M.
+	- Propagate new localisation strings to non-English localisation files. Seach for commented out entries with value "???".
+	- Fix the alignment indicator not showing for dual-mode APS turrets.
+- AI / WM:
+	- Improvements to the Orbital AI
+		- PID control option available, by default is active only during weapon firing, can be toggled to be active always or never active.
+		- If a fixed weapon is selected, AI will orient itself to fire the weapon, even if the weapon is not aligned with the forward direction of the craft.
+		- Improved maneuvering behavior, it is now better at intercepting targets, killing velocity, and prioritizes combat over minor orbital corrections when within combat range.
+		- Add option to engage head-on or broadside (for use with turreted weapons).
+		- Add option to select broadside direction (only active when PID is enabled).
+		- AI is now able to use reverse engines for maneuvers provided the "Reverse Engines" option is enabled (enabled by default).
+		- Add minimum firing speed option. If below this speed and within weapons range, AI will increase speed.
+		- Add option for AI using RCS to manage velocity relative to the target when firing (enabled by default).
+		- Add options to enable/disable evading gunfire using RCS and/or engine thrust.
+		- Add option to allow ramming (enabled by default). If enabled, AI will try to ram the target when it loses weapons, if disabled the AI will withdraw from combat.
+		- AI will not engage vessels if doing so will put the AI in risk of de-orbiting.
+		- Fixed AI repeatedly jumping back and forth between orbit correction and other modes.
+		- AI is now capable of avoiding collisions with other vessels, debris, and asteroids.
+		- AI is now properly aims and fires unguided missiles in orbit.
+		- AI will automatically move to closer intercept ranges if it is unable to lock missiles after 20s.
+	- Don't set the global infinite fuel option when maintaining fuel levels for individual vessels.
+	- Don't raycast for terrain normals when taking off from water, just use the up direction.
+- Armor / Hull:
+	- Revert invalid HullTypeNum values to that of Aluminium and log a warning.
+- Competition:
+	- Fix GM culling based on HP remaining to use percentage remaining instead of the raw part count.
+	- Add an option to average duplicates in the tournament parser.
+	- Fix incorrect parsing of unicode chars in the tournament parser for "wins".
+- Game Modes:
+	- Added g-force limits game mode for part failure and Kerbal GLOC (note: the pilot AI's g-limiter still doesn't work well).
+	- Asteroids Field:
+		- Adjust the asteroid field game mode to also work in orbit.
+		- Adjust forces on asteroids to keep them reasonably contained within the requested field volume and to avoid pinballing.
+		- Adjust the asteroid anomalous attraction distance profile to peak at 707m and drop to 0.25 at 0m and 0 at just over 1km.
+		- Improved competition messages related to asteroid fields.
+- Weapons:
+	- Missiles:
+		- Improvements
+			- Missile parts can be configured without a warhead and will be considered kinetic energy weapons. Upon impact, they will apply their kinetic energy as damage to the target.
+			- Change missile drop time increment from 0.5s to 0.1s.
+			- Missiles are now capable of intercepting each other at orbital speeds and will not phase through each other, even without the ContinousCollisions mod.
+			- Modular Missiles can be selected to intercept missiles if they have Engage Missiles enabled.
+			- Modular Missiles with Orbital Guidance now perform vacuum clearance maneuver (similar to HEKVs in space).
+			- Improvements to regular missile orbital guidance, missiles can now use homingType = orbital without RCS.
+			- Missiles with RCS will use RCS to offset gravity.
+			- Add targetCoM configuration option for IR missiles. If set to true, the missile will target the center of mass instead of the hottest part.
+		- Fixes
+			- Fix Modular Missiles with Orbital Guidance not hitting vessel and missile targets.
+			- Fix point defense missile interceptors not firing.
+			- Missile turrets now track targets properly in orbit.
+			- Fix missiles with no targeting type (i.e. AIR-2) not firing within engage range.
+		- Parts / Balancing
+			- Add new Kinetic Kill Vehicle (KKV) missile. The KKV is an orbital missile with 6 km/s delta-V and no warhead. It relies on kinetic energy from hitting a target directly to deal damage.
+			- Re-balanced the HE-KV-1 missile. The HE-KV-1 now has 3 km/s delta-V with a 60 km range and is best at shorter ranges (under 30 km). The HE-KV-1 retains the same mass.
+			- Orbital guidance missiles now have drag applied to them in atmosphere.	
+	- Rockets:
+		- Rework the rocket aiming to be consistent with how rockets fly, both in atmosphere and in orbit.
+		- Add a "detonate at minimum distance" option to flak/proximity rockets (enabled by default).
+		- Aero-stabilization is now stateless (doesn't depend on the time since launch, only on current aero-forces).
+		- Hydra70 and S-8KOM rocket types updated and variants added.
+	- Don't apply lead and weapon offset corrections to the pilot AI for turrets.
+	- Proximity detonation now uses the target's "average radius" instead of its "max radius".
+	- Shell ejection direction, variability (deviation), delay and lifetime are now customisable in the weapon config.
+	- Mostly fix the bomb-aimer - bombs without significant lift work fairly well, but JDAMs can be fairly imprecise.
+	- Missiles with RCS can now have multiple forwardRCS transforms.
+	- Avoid double-counting HP+armour of intervening parts in explosions and scale the damage reduction by the appropriate modifier.
+- Spawning:
+	- Allow specifying the reference heading for the first craft for circular spawning (loses precision within 1° of the poles).
+- RWP:
+	- Add S6R6, S6R7, S6R8, S6R9 and S6R10 defaults and custom logic.
+	- Refresh various UI text fields from the settings values when updating from RWP settings.
+- Evolution:
+	- Various fixes for the evolution engine from user themonthlydaily:
+		- Applies mutations to the correct craft.
+		- Fixes subsequent mutations to be applied to the base craft instead of the most recently modified version.
+		- Correctly save seed craft.
+		- Adds a display of which parameters are currently being mutated/tested.
+		- Fix various other internal bugs.
+
+1.6.12.0
 IMPROVEMENTS / FIXES
 - General:
 	- Fix Pwing HP scaling for large pwings being used as fuselages.
