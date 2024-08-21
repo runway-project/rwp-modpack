@@ -6,6 +6,10 @@
 	- Updated Chinese localisation thanks to user Marv1n-M.
 	- Propagate new localisation strings to non-English localisation files. Seach for commented out entries with value "???".
 	- Fix the alignment indicator not showing for dual-mode APS turrets.
+	- Waypoints / Waypoint Course builder can now set gate models on a per-gate basis, using models stored in /BDArmory/Models/WayPoint/
+	- BDA Craft Utilities Tool Lift to Weight readout split into Dry and Wet mass LTW scores.
+		- Can set what resources are considered part of drymass for Dry LtW calculations via new Drymass Resources button.
+	- Fix Kinetic Resist readout in the Armor Stats subsection of the BDA Craft utilities Tool being inverted.
 - AI / WM:
 	- Improvements to the Orbital AI
 		- PID control option available, by default is active only during weapon firing, can be toggled to be active always or never active.
@@ -23,22 +27,45 @@
 		- AI is now capable of avoiding collisions with other vessels, debris, and asteroids.
 		- AI is now properly aims and fires unguided missiles in orbit.
 		- AI will automatically move to closer intercept ranges if it is unable to lock missiles after 20s.
+	- Improvements to VTOL AI:
+		- VTOL AI given secondary speed controller; VTOL AI will now throttle engines set to 'independent thrust' for horizontal speed control independently of primary engines being used for lift/powered hover.
+	- AI will no longer ignore max missiles per target when using multimissile launchers for missile interception.
+	- AIs/WM no longer subject to GForce failures if KSP part G-Tolerances enabled.
 	- Don't set the global infinite fuel option when maintaining fuel levels for individual vessels.
 	- Don't raycast for terrain normals when taking off from water, just use the up direction.
 - Armor / Hull:
 	- Revert invalid HullTypeNum values to that of Aluminium and log a warning.
+	- Fix errors in armor damage calcs causing HE rounds to do decreasong amounds of armor damage over subsequent hits.
+	- Armor damage/integrity loss now adjustable via the Armor penetration Mult slider in the BDA Settigns menu, General Sliders subsection.
+	- Fix shrapnel damage from explosions phasing through armor.
 - Competition:
 	- Fix GM culling based on HP remaining to use percentage remaining instead of the raw part count.
 	- Add an option to average duplicates in the tournament parser.
 	- Fix incorrect parsing of unicode chars in the tournament parser for "wins".
+	- Fix GM_KILL_HP culling low partcount craft that are below the partcount threshold, but not the HP remaining percent.
+	- Add 'Stop Waypoints' button to stop a Waypoints comp started via the 'Run Waypoints' button.
+- Detectors:
+	- Radars/IRSTs now have a 'resourceName' field to set what resource they use.
+	- Fixes datalink from allied craft with sonar not displaying sonar contacts on non-splashed receiving craft.
+	- FLIR ball/Camera pod now have different niches; Camera pod is now longer ranged, FLIR ball has faster camera traverse.
+	- Targeting cameras now list traverse rate and max view range in the part menu infocard.
+	- Added radarChaffClutterFactor (default 1) field to radars, to permit setting how effective chaff is against the radar. Used when guiding SARH missiles/radar-linked gun turrets, see TWS radar .cfg for more details.
 - Game Modes:
 	- Added g-force limits game mode for part failure and Kerbal GLOC (note: the pilot AI's g-limiter still doesn't work well).
+	- Subsystem Battle Daamge to turrets/generators above 50% HP now reduces performance instead of disabling them.
+	- Waypoints mode now works with ground spawned caft.
+	- Fix Infinite Fuel until First Gate option for Waypoints Mode.
 	- Asteroids Field:
 		- Adjust the asteroid field game mode to also work in orbit.
 		- Adjust forces on asteroids to keep them reasonably contained within the requested field volume and to avoid pinballing.
 		- Adjust the asteroid anomalous attraction distance profile to peak at 707m and drop to 0.25 at 0m and 0 at just over 1km.
 		- Improved competition messages related to asteroid fields.
 - Weapons:
+	- 'ecPerShot' deprecated, weapons now use 'secondaryAmmoPerShot' for controlling EC/secondary resource usage for things like railguns, etc.
+	- Adds new 'secondaryAmmoName' field (default ElectricCharge), weapons that used ammo + ElectricCharge (railguns, etc) no longer required to use EC as the secondary ammo.
+	- Electrolaser EMP damage per shot/sec now set by 'laserDamage' instead of ecPerShot amount.
+	- Fix Burst Length Override softlocking the weapon after the first burst.
+	- Weapons can now use Hull Materials with a massMod >= 1.
 	- Missiles:
 		- Improvements
 			- Missile parts can be configured without a warhead and will be considered kinetic energy weapons. Upon impact, they will apply their kinetic energy as damage to the target.
@@ -49,20 +76,36 @@
 			- Improvements to regular missile orbital guidance, missiles can now use homingType = orbital without RCS.
 			- Missiles with RCS will use RCS to offset gravity.
 			- Add targetCoM configuration option for IR missiles. If set to true, the missile will target the center of mass instead of the hottest part.
+			- Firing conditions for IR missiles tightened up, AI should no longer select rear-Aspect IR missiles against head-on targets.
+			- Missiles with RCS can now have multiple forwardRCS transforms.
+			- Adds new ModuleMissileMagazine, MultiMissileLauncher reloadable rails and missile pods can now resupply from external missile magazine parts.
 		- Fixes
 			- Fix Modular Missiles with Orbital Guidance not hitting vessel and missile targets.
 			- Fix point defense missile interceptors not firing.
 			- Missile turrets now track targets properly in orbit.
 			- Fix missiles with no targeting type (i.e. AIR-2) not firing within engage range.
+			- Fix IR missiles occasionally suddenly switching lock to allied craft behind them.
+			- Fix edge-case issue where firing radar missiles would get soft-locked if trying to switch to a radar lock that didn't exist.
+			- Fix missile exhaust plume FX scaling.
+			- Fix missile softlock issue if AI tries to fire a laser/GPS missile at a target further than the targeting camera's max range.
+			- Fix nukes in vacuum erroneously using the wrong mass value for calculating impulse from the detonation.
 		- Parts / Balancing
 			- Add new Kinetic Kill Vehicle (KKV) missile. The KKV is an orbital missile with 6 km/s delta-V and no warhead. It relies on kinetic energy from hitting a target directly to deal damage.
 			- Re-balanced the HE-KV-1 missile. The HE-KV-1 now has 3 km/s delta-V with a 60 km range and is best at shorter ranges (under 30 km). The HE-KV-1 retains the same mass.
 			- Orbital guidance missiles now have drag applied to them in atmosphere.	
+	- Guns maxDeviation reduced following discovery they were miscalibrated last accuracy refactor; gun accuracy will see up to ~50% improvment across the board.
+	- Fix delay-fuzed rounds occasionally not detonating.
+	- Add support for guided bullets (needs radar/laser lock on target) for specialty ammo, new bulletDef field 'guidanceDPS', sets degrees/sec ammo can turn.
+	- The part menu infocard for Guns now lists weapon accuracy.
+	- The bullet stats section of Guns part menu infocards now lists fuze type.
+	- EMP weapons will no longer shutdown asteroids.
 	- Rockets:
 		- Rework the rocket aiming to be consistent with how rockets fly, both in atmosphere and in orbit.
 		- Add a "detonate at minimum distance" option to flak/proximity rockets (enabled by default).
 		- Aero-stabilization is now stateless (doesn't depend on the time since launch, only on current aero-forces).
 		- Hydra70 and S-8KOM rocket types updated and variants added.
+		- Fixes S-8KOM rocket mass. 
+		- Optimizations to Incindiary rockets, should now be a bit better at settings things on fire.
 	- Don't apply lead and weapon offset corrections to the pilot AI for turrets.
 	- Proximity detonation now uses the target's "average radius" instead of its "max radius".
 	- Shell ejection direction, variability (deviation), delay and lifetime are now customisable in the weapon config.
@@ -71,6 +114,7 @@
 	- Avoid double-counting HP+armour of intervening parts in explosions and scale the damage reduction by the appropriate modifier.
 - Spawning:
 	- Allow specifying the reference heading for the first craft for circular spawning (loses precision within 1° of the poles).
+	- Spawned Kerbs now have uniform G-tolerance.
 - RWP:
 	- Add S6R6, S6R7, S6R8, S6R9 and S6R10 defaults and custom logic.
 	- Refresh various UI text fields from the settings values when updating from RWP settings.
