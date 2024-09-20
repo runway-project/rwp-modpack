@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Tuple, Union
 
-VERSION = "1.23.1"
+VERSION = "1.23.2"
 
 parser = argparse.ArgumentParser(description="Tournament log parser", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('tournament', type=str, nargs='*', help="Tournament folder to parse.")
@@ -513,10 +513,17 @@ for tournamentNumber, tournamentDir in enumerate(tournamentDirs):
         if not args.quiet:  # Write results to console
             strings = []
             if not args.no_header and not args.current_dir and 'duration' in tournamentMetadata:
-                strings.append(f"Tournament {tournamentMetadata.get('ID', '???')} of duration {tournamentMetadata['duration'][1] -
-                               tournamentMetadata['duration'][0]} with {tournamentMetadata['rounds']} rounds starting at {tournamentMetadata['duration'][0]}")
-            headers = ['Name', 'Wins', 'Survive', 'MIA', 'Deaths (BRMRAS)', 'D.Order', 'D.Time', 'Kills (BRMR)', 'Assists', 'Hits', 'Damage', 'DmgTaken', 'RocHits', 'RocParts', 'RocDmg', 'HitByRoc',
-                                                                  'MisHits', 'MisParts', 'MisDmg', 'HitByMis', 'Ram', 'BD dealt', 'BD taken', 'Ast.', 'Acc%', 'RktAcc%', 'HP%', 'Dmg/Hit', 'Hits/Sp', 'Dmg/Sp'] if not args.scores_only else ['Name']
+                strings.append(
+                    f"Tournament {tournamentMetadata.get('ID', '???')} of duration {tournamentMetadata['duration'][1] - tournamentMetadata['duration'][0]} with {tournamentMetadata['rounds']} rounds starting at {tournamentMetadata['duration'][0]}"
+                )  # Python <3.12 has issues with line breaks in f-strings.
+            headers = [
+                'Name', 'Wins', 'Survive', 'MIA', 'Deaths (BRMRAS)', 'D.Order', 'D.Time',
+                'Kills (BRMR)', 'Assists', 'Hits', 'Damage', 'DmgTaken',
+                'RocHits', 'RocParts', 'RocDmg', 'HitByRoc',
+                'MisHits', 'MisParts', 'MisDmg', 'HitByMis',
+                'Ram', 'BD dealt', 'BD taken', 'Ast.',
+                'Acc%', 'RktAcc%', 'HP%', 'Dmg/Hit', 'Hits/Sp', 'Dmg/Sp'
+            ] if not args.scores_only else ['Name']
             if hasWaypoints and not args.scores_only:
                 headers.extend(['WPcount', 'WPtime', 'WPdev', 'WPbestC', 'WPbestT', 'WPbestD'])
             if args.score:

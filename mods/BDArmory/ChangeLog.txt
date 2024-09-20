@@ -1,4 +1,34 @@
-﻿1.7.0.0
+﻿v1.7.1.0
+IMPROVEMENTS / FIXES
+- General:
+	- Add a SimpleRepaint MM patch to ignore incompatible parts.
+- Armor:
+	- Add a max armor limit slider (under General Slider Settings) to limit the max thickness of armor. Default: unclamped.
+- UI:
+	- Team Icon text now scales with icon scale.
+- AI:
+	- Orbital AI:
+		- Adds ability to use sidemounted engines as RCS thrusters.
+		- Adds Zero-throttle firing range setting that will override maneuvering orientation in favor of pointing ship in attack Vector direction within set distance.
+		- AI now takes target acceleration/velocity into account when accelerating to engagement speed/killing velocity.
+- Detectors / Countermeasures:
+	- Allow higher precision for CM intervals and delays in the WM right-click menu.
+- Competition:
+	- Auto-generated tournaments use the last used world.
+	- Disable waiting for terrain to settle if the spawn altitude is >10km.
+	- Fix ramming scoring to also work for orbital AI.
+- Game Modes:
+	- When resetting asteroid fields, destroy those that have switched SoI as they don't reset properly.
+- Weapons:
+	- Optimizations to bullets, should be a slight performance increase when firing lots of bullets.
+	- Beehive submunitions with proximity/flak fuzes now properly set fuxe distance based on pellet tntMass, not parent shell's.
+	- Fix nuclear/explosive beehive submnitions not inheriting velocity when detonating on space.
+	- Fix APS going rapid-fire when running out of ammo.
+	- Fix HEAT bullets being reported as Missile damage in the Score parser.
+	- Fix issue with velocity calc that would result in penetrating rounds slowly drifing away from a hit ship in space.
+	- Update the KKV model with fixed textures thanks to Stardust.
+
+1.7.0.0
 IMPROVEMENTS / FIXES
 - General:
 	- Fixes for post-build event instructions on Windows to allow for different 7zip executables.
@@ -36,14 +66,13 @@ IMPROVEMENTS / FIXES
 	- Don't raycast for terrain normals when taking off from water, just use the up direction.
 - Armor / Hull:
 	- Revert invalid HullTypeNum values to that of Aluminium and log a warning.
-	- Fix errors in armor damage calcs causing HE rounds to do decreasong amounds of armor damage over subsequent hits.
+	- Fix errors in armor damage calcs causing HE rounds to do decreasing amounts of armor damage over subsequent hits.
 	- Armor damage/integrity loss now adjustable via the Armor penetration Mult slider in the BDA Settigns menu, General Sliders subsection.
 	- Fix shrapnel damage from explosions phasing through armor.
 - Competition:
 	- Fix GM culling based on HP remaining to use percentage remaining instead of the raw part count.
 	- Add an option to average duplicates in the tournament parser.
 	- Fix incorrect parsing of unicode chars in the tournament parser for "wins".
-	- Fix GM_KILL_HP culling low partcount craft that are below the partcount threshold, but not the HP remaining percent.
 	- Add 'Stop Waypoints' button to stop a Waypoints comp started via the 'Run Waypoints' button.
 - Detectors:
 	- Radars/IRSTs now have a 'resourceName' field to set what resource they use.
@@ -94,7 +123,7 @@ IMPROVEMENTS / FIXES
 			- Add new Kinetic Kill Vehicle (KKV) missile. The KKV is an orbital missile with 6 km/s delta-V and no warhead. It relies on kinetic energy from hitting a target directly to deal damage.
 			- Re-balanced the HE-KV-1 missile. The HE-KV-1 now has 3 km/s delta-V with a 60 km range and is best at shorter ranges (under 30 km). The HE-KV-1 retains the same mass.
 			- Orbital guidance missiles now have drag applied to them in atmosphere.	
-	- Guns maxDeviation reduced following discovery they were miscalibrated last accuracy refactor; gun accuracy will see up to ~50% improvment across the board.
+	- Guns maxDeviation reduced following discovery they were miscalibrated last accuracy refactor; gun accuracy will see up to ~50% improvement across the board.
 	- Fix delay-fuzed rounds occasionally not detonating.
 	- Add support for guided bullets (needs radar/laser lock on target) for specialty ammo, new bulletDef field 'guidanceDPS', sets degrees/sec ammo can turn.
 	- The part menu infocard for Guns now lists weapon accuracy.
@@ -111,7 +140,6 @@ IMPROVEMENTS / FIXES
 	- Proximity detonation now uses the target's "average radius" instead of its "max radius".
 	- Shell ejection direction, variability (deviation), delay and lifetime are now customisable in the weapon config.
 	- Mostly fix the bomb-aimer - bombs without significant lift work fairly well, but JDAMs can be fairly imprecise.
-	- Missiles with RCS can now have multiple forwardRCS transforms.
 	- Avoid double-counting HP+armour of intervening parts in explosions and scale the damage reduction by the appropriate modifier.
 - Spawning:
 	- Allow specifying the reference heading for the first craft for circular spawning (loses precision within 1° of the poles).
