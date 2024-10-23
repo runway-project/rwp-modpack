@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 
-# Standard library imports
+# Standard Library
 import argparse
 import csv
+import subprocess
 import sys
 import tempfile
 from pathlib import Path
 from typing import Union
 
-# Third party imports
+# Third Party
 import matplotlib.pyplot as plt
 import numpy
 
@@ -63,5 +64,9 @@ if args.save:
         filename = args.save
     plt.savefig(filename, dpi='figure', bbox_inches='tight', transparent=args.transparent)
     print(f"Image saved to {filename}")
+    try:
+        subprocess.run(f'display {filename}'.split())
+    except:
+        pass
 else:
     plt.show(block=True)

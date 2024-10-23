@@ -6,7 +6,7 @@ import re
 import sys
 from pathlib import Path
 
-VERSION = "4.1"
+VERSION = "4.2"
 
 parser = argparse.ArgumentParser(description="Log file parser for continuous spawning logs.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("logs", nargs='*', help="Log files to parse. If none are given, the latest log file is parsed.")
@@ -188,18 +188,19 @@ if len(data) > 0:
             print(f"Results for {filename}:")
             name_length = max([len(craft) for craft in summary])
             field_lengths = {field: max(len(fields_short[field]) + 2, 8) for field in fields}
-            print(f"Name{' '*(name_length-4)}     score" + "".join(f"{fields_short[field]:>{field_lengths[field]}}" for field in fields))
+            fields_to_show = [field for field in fields if not all(summary[craft][field] == 0 for craft in summary)]
+            print(f"Name{' '*(name_length-4)}     score" + "".join(f"{fields_short[field]:>{field_lengths[field]}}" for field in fields_to_show))
             for craft in sorted(summary, key=lambda c: summary[c]["score"], reverse=True):
                 print(f"{craft}{' '*(name_length-len(craft))}  {summary[craft]['score']:8.2f}" +
-                      "".join(f"{summary[craft][field]:>{field_lengths[field]}.0f}" if 'accuracy' not in field else f"{summary[craft][field]:>{field_lengths[field]-1}.1f}%" for field in fields))
+                      "".join(f"{summary[craft][field]:>{field_lengths[field]}.0f}" if 'accuracy' not in field else f"{summary[craft][field]:>{field_lengths[field]-1}.1f}%" for field in fields_to_show))
             print("")
 
             if not args.no_file:
                 # Write results to file
                 with open(log_dir / f"results-{Path(filename).stem}.csv", "w") as results_data:
-                    results_data.write("Name,Score," + ",".join(fields) + "\n")
+                    results_data.write("Name,Score," + ",".join(fields_to_show) + "\n")
                     for craft in sorted(summary, key=lambda c: summary[c]["score"], reverse=True):
-                        results_data.write(f"{craft},{summary[craft]['score']:.2f}," + ",".join(f"{summary[craft][field]:.2f}" for field in fields) + "\n")
+                        results_data.write(f"{craft},{summary[craft]['score']:.2f}," + ",".join(f"{summary[craft][field]:.2f}" for field in fields_to_show) + "\n")
     else:
         # Merge the results from each log into a single summary.
         summary = {}
@@ -225,8 +226,8 @@ if len(data) > 0:
         if not args.no_file:
             # Write results to file
             with open(log_dir / f"results.csv", "w") as results_data:
-                results_data.write("Name,Score," + ",".join(fields) + "\n")
+                results_data.write("Name,Score," + ",".join(fields_to_show) + "\n")
                 for craft in sorted(summary, key=lambda c: summary[c]["score"], reverse=True):
-                    results_data.write(f"{craft},{summary[craft]['score']:.2f}," + ",".join(f"{summary[craft][field]:.2f}" for field in fields) + "\n")
+                    results_data.write(f"{craft},{summary[craft]['score']:.2f}," + ",".join(f"{summary[craft][field]:.2f}" for field in fields_to_show) + "\n")
 else:
     print(f"No valid log files found.")
