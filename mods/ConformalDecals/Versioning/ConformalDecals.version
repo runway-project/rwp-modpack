@@ -6,7 +6,7 @@
     "VERSION": {
         "MAJOR": 0,
         "MINOR": 2,
-        "PATCH": 12,
+        "PATCH": 10,
         "BUILD": 100000
     },
     "KSP_VERSION": {
