@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Tuple, Union
 
-VERSION = "1.23.2"
+VERSION = "1.23.4"
 
 parser = argparse.ArgumentParser(description="Tournament log parser", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('tournament', type=str, nargs='*', help="Tournament folder to parse.")
@@ -119,7 +119,7 @@ def encode_names(log_lines: List[str]) -> Tuple[Dict[str, str], List[str]]:
             craft_names.add(entry)
         if field == 'ALIVE':
             craft_names.add(entry)
-    craft_names.update({json.dumps(name)[1:-1] for name in craft_names})
+    craft_names.update({json.dumps(name, ensure_ascii=False)[1:-1] for name in craft_names})  # Handle manually encoded DEADTEAMS.
     craft_names = {cn: b64encode(cn.encode()) for cn in craft_names}
     sorted_craft_names = list(sorted(craft_names, key=lambda k: len(k), reverse=True))  # Sort the craft names from longest to shortest to avoid accidentally replacing substrings.
     for i in range(1, len(log_lines)):  # The first line doesn't contain craft names
@@ -285,7 +285,7 @@ for tournamentNumber, tournamentDir in enumerate(tournamentDirs):
 
     if not args.no_files and len(tournamentData) > 0:
         with open(tournamentDir / 'results.json', 'w', encoding="utf-8") as outFile:
-            json.dump(tournamentData, outFile, indent=2)
+            json.dump(tournamentData, outFile, indent=2, ensure_ascii=False)
 
     craftNames = sorted(list(set(craft for round in tournamentData.values() for heat in round.values() for craft in heat['craft'].keys())))
     teamWins = Counter([team for round in tournamentData.values() for heat in round.values() if heat['result']['result'] == "Win" for team in heat['result']['teams']])
@@ -473,7 +473,7 @@ for tournamentNumber, tournamentDir in enumerate(tournamentDirs):
 
     if not args.no_files and len(summary['craft']) > 0:
         with open(tournamentDir / 'summary.json', 'w', encoding="utf-8") as outFile:
-            json.dump(summary, outFile, indent=2)
+            json.dump(summary, outFile, indent=2, ensure_ascii=False)
 
     if len(summary['craft']) > 0:
         if not args.no_files:

@@ -1,33 +1,181 @@
-﻿v1.7.1.0
+﻿﻿v1.8.0.1
+IMPROVEMENTS / FIXES
+- Weapons:
+	- Missiles:
+		- Fix not being able to manually fire GPS-guided bombs/missiles without an AI-assigned target.
+
+v1.8.0.0
+IMPROVEMENTS / FIXES
+- General:
+	- Adjust fuel leak FX to work better in space and low atmospheric density.
+	- Add the ability to add custom sub-categories to the BDA part categorizer.
+	- Add some new missile plume prefabs for jets/sustainer stages.
+- UI:
+	- Improve prevention of click-through of various windows in the editor.
+	- Open sections of the AI GUI now remain open when switching between flight and editor.
+	- Competition UI text in the upper left corner now properly scales when adjusting UI_SCALE.
+	- Added an option to follow the stock UI scaling instead of BDA's one.
+	- Add ability to set teams' Allies to the Team Selector GUI.
+	- Add craft thumbnails to the custom craft browser.
+	- Add a button (in the Settings->UI section) when in the SPH/VAB to generate missing craft thumbnails (which can be found in KSP/thumbs).
+		- Generating thumbnails involves loading each craft and capturing a thumbnail. This can take some time if many are missing.
+	- Add "VAB Organizer" MM patch for BDA parts — from user Spartwo.
+- AI:
+	- Fix AI not going into Ramming mode when guns possess ammo, but not enough to meet resourceRequestAmount of mounted weapons.
+	- Orbital AI now automatically disables gimbal on reverse thrust and RCS engines (gimbal directions for these are incorrect).
+	- Add missing sonar checks for AIs trying to fire torpedoes.
+	- Fix AI not turning on Active sonar when trying to fire INS torpedoes if no passive sonar on vessel.
+	- AI visual detection of incoming missiles within visual range no longer requires a RWR. RWR detection of incoming missiles still requires a RWR on the craft.
+	- Tweak AI detection and reaction to incoming GPS/INS missiles, they should detect and react to them a bit more consistantly now.
+	- AI can now make use of non-DynamicRadar radars for missile targeting when being actively targeted by incoming anti-radiation ordinance.
+	- AI can now do non-linear evasion vs long-range targets while aiming missiles.
+	- Add Extend Min Gain Rate slider to set extend abort condition if not gaining distance fast enough.
+	- AI now checks for available secondary resource as well as primary for weapons using 2 ammo types (e.g. railguns using bullets + EC) when doing weapon selection checks.
+	- AI can now use an ally laserdot for targeting laser-guided ordinance if it lacks a targetcam of its own.
+	- AI now uses a TWR factor in the climb rate limit calculations.
+	- Improvements to formation flying behaviour. Planes in follow mode should now hold their positions better and be more stable.
+	- Fix point-defense missile system, AI should now engage with the appropriate amount of missiles.
+	- AI will no longer drop locks when these are supporting semi-active radar homing missiles.
+- Competition:
+	- Fix craft equipped with repulsors breaking ground spawn.
+	- Add support for using custom spawn templates with RNG style tournaments.
+		- The number of teams per heat and vessels per team per heat are restricted to at most those in the selected spawn template.
+		- Teams are considered as the per file / per folder option.
+		- The "Re-use Craft To Fill Teams" option applies for teams that lack sufficient craft to fill the spawn template.
+		- Both shuffled and ranked tournaments are supported.
+	- Add a hidden option to "smart assign" teams for custom spawn templates (when not running a tournament).
+		- Set "VESSEL_SPAWN_SMART_REASSIGN_TEAMS = True" in BDA's settings.cfg to enable it when "Reassign Teams" is enabled.
+		- The first vessel in the spawn template with a non-default team name (can be set in the SPH) that isn't already taken sets the name for the team. Other teams get their default letter.
+	- Updated plot_summary.py to adjust how the graph and legend fit in the window.
+- Countermeasures:
+	- Fix NRE from countermeasure droppers missing an ejectTransform in the .cfg.
+	- Fix Acoustic Decoy launcher launch direction.
+	- Acoustic Decoys will no longer defy gravity and fly if launched out of water.
+	- Fix Bubble Curtain launcher NRE.
+	- "Infinite Ordinance" now also applies to countermeasure droppers.
+	- Adjust cmThreshold timing for SLW countermeasures to 5x time set in WM to account for torpedoes being substantially slower than missiles.
+		-	This should allow proper CM behavior against both torpedoes and missiles without compromising one or the other.
+- Detectors:
+	- RWR no longer clamped to visual FOV for detecting incoming missiles.
+	- Add new fieldOfView field to RadarWarningReceiver module to set custom RWR FOV.
+	- Fix AI not popping countermeasures for non-radar incoming missiles detected by RWR but outside visual range.
+	- Added notching and beaming behavior for both vessel radars and missile radars.
+		- Defaults to off. When toggled on, radars can be notched by an aircraft flying low and at 90° to the radar.
+		- Behavior is configurable using the activeRadarVelocityGate and activeRadarRangeGate floatcurves for missiles and radarVelocityGate and radarRangeGate floatcurves for radars.
+		- Also includes water blocking radars, forcing engagements to consider the horizon.
+			- Added a hidden "RADAR_ALLOW_SURFACE_WARFARE" option (default: true), which permits surface vessels to see each other over the horizon to simplify naval engagements.
+	- Fix the targeting window breaking a lot of scroll behaviours.
+	- Fix the targeting window's slewing along an axis and add a small quadratic component to allow faster slewing with faster mouse movement.
+	- Avoid firing missiles while slewing the targeting window if the mouse drifts outside the window.
+- Weapons:
+	- Adjust bullet tracers to lead up to their current position instead of from their previous position.
+	- Reduce bullet tracer visual glitching due to krakensbane adjustments.
+	- Weapons will now properly report Ammo Depleted when ammo remaining is less than amount required to fire.
+	- Fix weapons refusing to fire when one shot left when using multiple ammo boxes with differing starting ammo amounts due to floating point errors.
+	- Explosive beehive submunition explosion FX now scaled based on submunition tntMass, not parent HE VFX.
+	- Fix weapons with reload animations adding an extra 1-20s to the reload time, based on fire anim length.
+	- Add new "postFireChargeAnim" field for weapons with charge animations to specify if the animation should play in reverse to deactivate the weapon after firing.
+	- Fix weapons with reload sounds using "oneShotSound = false" immediately stopping the SFX when switching to a different weapon.
+	- Fix weapons with spindown anims when they stop firing that have overheated under AI control not spinning down until they've cooled down.
+	- Laser weapons or other weapons using ElectricCharge can now fire if Infinite Electricity is on, even if Infinite Ammo is not.
+	- Adds fireAnimOverrideSpeed field to set custom fire animation play rate instead of basing it on rate of fire.
+	- Fix electrolaser NRE when firing on a target vessel.
+	- Added a hidden "WEAPONS_RESPECT_CROSSFEED" setting (default: true), which may be set to false to restore previous behavior where guns did not respect crossfeed rules.
+	- Improved performance of bullet firing code.
+	- Fixed issue where slaved turrets would fire at a stale radar contact.
+	- Added "guidanceRange" parameter for guided bullets, determines the range to the target at which the bullet will begin to maneuver, set to -1 for guidance immediately from the muzzle.
+	- Missiles:
+		- Add "cruiseRangeTrigger" field to missiles. Missiles using this will delay firing their cruise motor until within the set distance to target.
+		- Tweak acoustic propagation loss rate for passive acoustic torpedoes, should have a bit further effective detection range now.
+		- Fix INS guidance ordinance not configured with a datalink immediately triggering the lost lock condition and self-destructing.
+		- Passive Sonar torpedoes now home in on loudest part, not COM. Respects targetCoM override in the .cfg.
+		- Fix Terminal Guidance Passive Sonar torpedoes not entering terminal guidance.
+		- Fix laser guided ordinance locking on to enemy laser dots.
+		- Missile in-flight anims (flightAnimationName) now starts playing when boost motor ignites instead of post boost phase.
+		- Added "custom" warhead module, functions like a normal warhead, except it launches a bullet instead of exploding, integrated with missiles.
+		- Point-defense missile turrets will no longer follow mouse aim unless manually selected.
+		- Fixed booster mass missing from missile dV calculation.
+		- Fixed terminal radar guidance missiles lacking IFF.
+		- Inertial guidance missiles with terminal guidance that were dumbfired will now activate their terminal guidance.
+- Armor:
+	- Armor should now be more consistent in terms of HE resistance. Adjusting the "Armor Explosion Resistance Multiplier" should now more directly affect the amount of armor penetration explosions do.
+	- Improved long-dart armor penetration mechanics, should have improved performance against consecutive plates in contact with each other. Improved residual velocity formula.
+	- Implemented "realistic" model for explosive reactive armor against kinetic projectiles, now using an interaction length-based model, supports symmetrical and open-faced sandwich configurations.
+		- Hits on the sides of explosive reactive armor now no longer provide additional armor protection. (For Modders: Ensure that the section.forward transform is normal to the strike-face of the ERA. Turning on Debug Lines will show you the forward transforms in blue, the green and red lines represent .right and .up respectively.)
+		- Now the specific explosive reactive armor section hit by bullets will explode instead of a random section.
+	- Implemented angle correction for explosive reactive armor hits, now penetration increases with increasing hit angle. Resistance described by armorModifier * 300 mm at 68 degrees.
+	- HEAT warheads now become unfocused as they penetrate through layers of armor, thicker layers will unfocus HEAT jets more than thinner layers.
+	- Added a hidden "HEAT_CONE_HALF_ANGLE" setting (default: 2.5), which allows the damage cone angle for HEAT warheads to be adjusted.
+		- Setting this value to -1 makes the HEAT damage area into a line instead of a cone.
+	- Added a hidden "KERBAL_ERA" setting (default: true), which can be set to false so that EVA Kerbals no longer provide infinite armor.
+	- Adjustable armor now scales breakingForce and breakingTorque based on values in the part.cfg file.
+- RWP:
+	- For S6R10, GM kill craft that lack propulsion and are significantly beyond the asteroid field radius.
+	- Adjust attraction of asteroids beyond 90% of the field radius to not clump together at the centre so that they don't kill the sole surviving craft.
+	- Add craft spawn warning message if craft doesn't have AI/WM on root part or if the root part isn't a cockpit.
+- P:S:
+	- Add max extend time limit clamp to override extend behavior that goes on for longer than time limit.
+	- Add support for automated AI/WM settings for competition rules compliance. To utilze, create a 'Comp_settings.cfg' with an 'AIWMChecks' node, containing one or more of the following settings: 
+		-	extensionCutoffTime = n
+		-	extendDistanceAirToAir = n
+		-	MONOCOCKPIT_VIEWRANGE = n
+		-	DUALCOCKPIT_VIEWRANGE = n
+		-	guardAngle = n
+		-	collisionAvoidanceThreshold = n
+		-	vesselCollisionAvoidanceLookAheadPeriod = n
+		-	vesselCollisionAvoidanceStrength = n
+		-	idleSpeed = n
+		-	DISABLE_SAS = T/F	
+		If the file is not present, or it is, but the Use AI/WM Overrides toggle in Game Modes is off, overrides will not be used. Overrides will apply on competition start or vessel spawn.
+
+v1.7.1.0
 IMPROVEMENTS / FIXES
 - General:
 	- Add a SimpleRepaint MM patch to ignore incompatible parts.
+	- Fix typos and duplicates in the changelog.
 - Armor:
 	- Add a max armor limit slider (under General Slider Settings) to limit the max thickness of armor. Default: unclamped.
 - UI:
 	- Team Icon text now scales with icon scale.
 - AI:
 	- Orbital AI:
-		- Adds ability to use sidemounted engines as RCS thrusters.
+		- Adds ability to use controllable sidemounted engines as RCS thrusters.
+		- Add toggles to disable use of RCS for translation and rotation.
 		- Adds Zero-throttle firing range setting that will override maneuvering orientation in favor of pointing ship in attack Vector direction within set distance.
 		- AI now takes target acceleration/velocity into account when accelerating to engagement speed/killing velocity.
+		- Adjustments to the hasPropulsion check to properly detect when a vessel no longer has propulsion.
 - Detectors / Countermeasures:
 	- Allow higher precision for CM intervals and delays in the WM right-click menu.
+	- Fix invalid C# syntax in the TWS radar .cfg file.
 - Competition:
 	- Auto-generated tournaments use the last used world.
-	- Disable waiting for terrain to settle if the spawn altitude is >10km.
 	- Fix ramming scoring to also work for orbital AI.
 - Game Modes:
-	- When resetting asteroid fields, destroy those that have switched SoI as they don't reset properly.
+	- Sanitise the waypoint course index in the vessel spawner window in case the course list has changed.
+	- Asteroid Field:
+		- When resetting asteroid fields, destroy those that have switched SoI as they don't reset properly.
+		- Adjust the asteroid attraction to be 20% of the field radius instead of hard-coded to 1km.
+		- Fix asteroids not spawning at the correct location in orbit.
+		- Limit motion-reduction force applied to asteroids to a linear function above 1500m/s and the maximum centroidFactor for re-centering asteroids to avoid yeeting them when the average velocity suddenly changes due to vessels dying.
+		- Limit growth of the asteroid pool to twice the requested field size to prevent infinitely growing pool size when there are issues generating new asteroids.
 - Weapons:
 	- Optimizations to bullets, should be a slight performance increase when firing lots of bullets.
 	- Beehive submunitions with proximity/flak fuzes now properly set fuxe distance based on pellet tntMass, not parent shell's.
-	- Fix nuclear/explosive beehive submnitions not inheriting velocity when detonating on space.
+	- Fix nuclear/explosive beehive submunitions not inheriting velocity when detonating on space.
+	- Fix beehive ammo with nuclear submunitions not being able to get the explosion models.
 	- Fix APS going rapid-fire when running out of ammo.
 	- Fix HEAT bullets being reported as Missile damage in the Score parser.
 	- Fix issue with velocity calc that would result in penetrating rounds slowly drifing away from a hit ship in space.
-	- Update the KKV model with fixed textures thanks to Stardust.
-
+	- Fix laser hit position not accounting for Krakensbane.
+	- Fix EC usage requirements not appearing in infocards when weapons are using deprecated ECPerShot.
+	- Missiles:
+		- Update the KKV model with fixed textures thanks to Stardust.
+		- Don't evade missiles fired from teammates unless the missile is locked on to craft or craft is in the flight path of the missile.
+		- Log an error if the missile exhaust prefab doesn't exist without breaking OnStart.
+- Spawning:
+	- Disable waiting for terrain to settle if the spawn altitude is >10km.
+	- Add a couple of 30s timeouts to spawning initialisation to avoid a potential soft-lock.
+  
 1.7.0.0
 IMPROVEMENTS / FIXES
 - General:

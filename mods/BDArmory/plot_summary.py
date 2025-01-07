@@ -13,7 +13,7 @@ from typing import Union
 import matplotlib.pyplot as plt
 import numpy
 
-VERSION = "1.4"
+VERSION = "1.5"
 
 parser = argparse.ArgumentParser(description="Plot the scores of a tournament as they accumulated per round", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("tournament", nargs="?", type=str, help="The tournament to plot (optional).")
@@ -51,7 +51,13 @@ names = [data[row][0] for row in range(len(data) - vessel_count, len(data))]
 scores = numpy.array([[float(v) for v in data[row][1:]] for row in range(len(data) - vessel_count, len(data))])
 plt.figure(figsize=(16, 10), dpi=200)
 plt.plot(scores.transpose(), linewidth=5)
-plt.legend(names, loc='upper left')
+plt.axhline(color='black')
+if len(names) > 16:  # Roughly half the plot height, put them outside the graph
+    plt.legend(names, loc='upper left', bbox_to_anchor=(1, 1))
+else:
+    plt.legend(names, loc='upper left')
+plt.autoscale(enable=True, tight=True)
+plt.tight_layout()
 if args.cut_zero:
     y0, y1 = plt.ylim()
     plt.ylim(max(y0, 0), y1)
