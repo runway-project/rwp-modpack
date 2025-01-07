@@ -1,0 +1,21 @@
+{
+  "NAME": "B9 Aerospace Procedural Wings",
+  "URL": "https://github.com/SuicidalInsanity/B9-PWings-Modified/tree/master/B9_Aerospace_ProceduralWings.version",
+  "DOWNLOAD": "https://github.com/SuicidalInsanity/B9-PWings-Modified/releases",
+  "VERSION": {
+    "MAJOR": 0,
+    "MINOR": 47,
+    "PATCH": 2,
+    "BUILD": 0
+  },
+  "KSP_VERSION": {
+    "MAJOR": 1,
+    "MINOR": 12,
+    "PATCH": 0
+  },
+  "KSP_VERSION_MIN": {
+    "MAJOR": 1,
+    "MINOR": 10,
+    "PATCH": 0
+  }
+}
