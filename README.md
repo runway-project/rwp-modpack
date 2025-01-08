@@ -1,6 +1,6 @@
-# RWP Season 6 Modpack
+# RWP Modpack
 
-Hullo, it's EclipticIndustries here! Welcome to the [Runway Project Season 6](https://discord.gg/mzAbqvmP) modpack. This modpack is meant to be used in the context of RWP S6, but feel free to check it out regardless if you're looking for a somewhat tailored aircraft-focused BDArmory experience, with a stock KSP balance.
+Hullo, it's EclipticIndustries here! Welcome to the [Runway Project](https://discord.gg/mzAbqvmP) modpack. This modpack is meant to be used in the context of RWP, but feel free to check it out regardless if you're looking for a somewhat tailored aircraft-focused BDArmory experience, with a stock KSP balance.
 
 We've chosen to distribute this modpack as a stand-alone zip file rather than a CKAN archive mostly for simplicity, but also to allow us to be selective in which parts are in included, and to easily integrate customized config. If you're interested in using this modpack as a player, just download `RWP_Modpack.zip`, and copy the `GameData` folder within it into your KSP install.
 

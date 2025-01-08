@@ -23,7 +23,7 @@ import {normalize, join} from 'path/posix'
 import archiver from 'archiver'
 
 /** Modpack version. Update this when content changes. */
-const VERSION = '1.11.0'
+const VERSION = '2.0.0'
 
 const include_file_extensions = ['png', 'dds', 'tga', 'jpg', 'jpeg', 'cfg', 'mu', 'dll', 'version', 'txt', 'md']
 
