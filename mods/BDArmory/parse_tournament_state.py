@@ -2,6 +2,7 @@
 
 # Standard library imports
 import argparse
+import gzip
 import json
 from pathlib import Path
 
@@ -23,8 +24,12 @@ state_file: Path = args.state
 json_file: Path = state_file.with_suffix(".json")
 
 if not args.re_encode:  # Decode the tournament.state to pure JSON and optionally print it.
-    with open(args.state, "r") as f:
-        state = json.load(f)
+    try:  # Try compressed gzip first
+        with gzip.open(args.state, "rb") as f:
+            state = json.load(f)
+    except:  # Revert to plain ASCII
+        with open(args.state, "r") as f:
+            state = json.load(f)
 
     # Various elements are recursively encoded in JSON strings due to Unity's limited JSONUtility functionality.
     # We decode and organise them here.
@@ -130,5 +135,9 @@ else:  # Re-encode the tournament.json to a tournament.state file
     state["_teamFiles"] = [json.dumps({"ls": team}, separators=separators) for team in state["teamFiles"]]
     del state["teamFiles"]
 
-    with open(state_file, "w") as f:
-        json.dump(state, f, separators=separators)
+    try:  # Dump back to gzip compressed format
+        with gzip.open(state_file, "wb") as f:
+            f.write(json.dumps(state, separators=separators).encode("utf-8"))
+    except:  # Revert to ASCII
+        with open(state_file, "w") as f:
+            json.dump(state, f, separators=separators)
