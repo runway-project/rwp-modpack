@@ -6,7 +6,7 @@ import gzip
 import json
 from pathlib import Path
 
-VERSION = "1.0.0"
+VERSION = "1.0"
 
 parser = argparse.ArgumentParser(
     description="Tournament state parser",

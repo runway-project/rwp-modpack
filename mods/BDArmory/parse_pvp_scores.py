@@ -12,7 +12,7 @@ from typing import Union
 # Third party imports
 import matplotlib.pyplot as plt
 
-VERSION = "1.2.0"
+VERSION = "2.0"
 
 parser = argparse.ArgumentParser(description="PVP score parser", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('tournament', type=str, nargs='*', help="Tournament folder to parse.")

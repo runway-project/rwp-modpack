@@ -13,7 +13,7 @@ from typing import Union
 import matplotlib.pyplot as plt
 import numpy
 
-VERSION = "1.5"
+VERSION = "5.0"
 
 parser = argparse.ArgumentParser(description="Plot the scores of a tournament as they accumulated per round", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("tournament", nargs="?", type=str, help="The tournament to plot (optional).")

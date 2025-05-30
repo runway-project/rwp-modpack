@@ -1,4 +1,64 @@
-﻿v1.9.0.0
+﻿v1.10.0.0
+IMPROVEMENTS / FIXES
+- General:
+	- Fix colliders on the AWACS Radar when using legless variant.
+	- Update the logic for syncing advanced 'Game Difficulty' settings to respect custom G-limit settings.
+- UI:
+	- Add an alternate layout to the entries in the vessel switcher, togglable via the ↔ button.
+	- Adjust colour of vessel status and target strings in the vessel switcher for better visibility.
+	- Update localisation synchronisation script and sync en-us to other languages. Missing entries are commented out and tagged with ??? and the English translation (to assist with user contributions).
+	- Fix the wrongly labeled "ru-ru" localisation to "ru" so that it loads properly.
+	- Add additional Chinese localisation thanks to user ZIYUXUAN201011.
+	- Updated German localisation from EzBro.
+	- Adjust waypoint ranking in the vessel switcher window to be based on the current score weights.
+	- Fix m/km units in Team Icons to be used appropriately.
+	- Automatically disable team scores in the score window when running FFA tournaments or continuous spawning.
+- AI:
+	- Improvements to pilot follow mode to improve stability.
+	- Fix check for overriding terrain avoidance when ramming ground targets.
+	- Fix AI always seeing all LoS targets within 200km regardless of view range or radar detection.
+	- The AI targeting priority 'Aerial Target Preference' now considers craft flatspinning or otherwise possessing negligible horizontal velocity lower than 200m from the ground as semi-ground targets for target filtering.
+	- Adjust the "fixed field" toggles in the AI GUI for auto-tuning the pilot PID axes that are in use.
+  - AIs set to evade while running waypoint courses will now use evasion non-linearity, if enabled, to provide some dodge capability while still remaining on-course for the next gate.
+	- Tweaked gate targeting logic, should reduce last-second control jerk while passing through gates with a high deviation.
+	- Waypoint Race mode now works with Surface and VTOL AI.
+	- Add 3-axis static damping in the pilot PID.
+		- Dynamic damping and 3-axis damping are now independent toggles.
+		- The UI (both PAW and AI GUI) update to show only the active damping sliders.
+		- Craft that used 3-axis dynamic damping get automatically updated to use the independent toggles without losing their tunings (but updated craft are not backwards compatible with older installs).
+	- Clamp the strafing minAlt of the pilot AI to at most half the gun range to give at most a 30° dive slope for short range guns.
+	- Some minor performance optimisations.
+- Countermeasures:
+	- Fix flare and smoke CMs ejecting sideways.
+- Detectors:
+	- Display non-zero RCS <= 0.01m^2 as dBsm instead of square meters for more precision.
+- Weapons:
+	- Removed the 'Engage Missile' toggle from APS/Dual-Purpose APS turrets as these weapons don't use it and it was confusing users.
+	- Fix custom ammo belts not cycling ammo type in some situations.
+	- Fix weapons using a secondary ammo consuming secondary ammo when primary ammo missing.
+	- Fix tracers on guns with tracerlength > 0 extending behind gun on firing.
+	- Radar slaving multiple turrets when turret multi-targeting > 1 now sees if a radar lock exists for each secondary target, instead of overriding multi-targeting and aiming all guns to the primary lock.
+	- Fix Point Defense guns not firing on incoming missiles.
+	- Add Aim Override option to set what weapon AI uses for aiming/target lead when using heterogeneous weapon groups/weapons with offsets from centerpoint.
+	- Fix 'is target behind terrain' check extending beyond the target, preventing weapons from firing if target is in front of a wall or hill.
+	- Missiles:
+		- Added "hasIFF" field to missiles allowing for missile seekers without IFF functionality. Defaults to true.
+		- Fix AAMLoft implementation for MMGs.
+		- Fix reload gauge for reloadable launchers.
+		- Add dynamic ordinance offset for reloadable rails so larger missiles no longer clip into rails/hardpoint mounts.
+		- Fix lock-less Radar missiles doing a loop instead of going straight.
+		- Fix Reload Gauge on reloadable launchers.
+		- Fix Account For Mass/Cost not applying to Missile magazines.
+		- Fix Modular Missiles not being able to intercept missiles.
+- Competition:
+	- Adjust the default score weights for rockets to be more inline with that of bullets.
+	- Adds a Vessel Legality checker button to the BDA Utilities Tool GUI if 'Runway Project' or 'Use Comp Overrides' gamemodes options are enabled and a Comp_settings.cfg is added to GameData/BDArmory/PluginData/. This will check a craft in the SPH/VAB for part count/engine count/Lift-To-Weight/Thrust-Weight-Ratio/max allowed weaponry/banned parts/etc. Check GameData/BDArmory/PluginData/Comp_settings.cfg once loaded in KSP for more info.
+	- Switch score weights to reside in their own config file "score_weights.cfg" to simplify distribution of custom score weights in RWP.
+- Spawning:
+	- Reset the custom craft browser internals if the user switches saves.
+	- Add caching of the filtered vessel list in the custom craft browser to reduce UI rendering time.
+
+v1.9.0.0
 IMPROVEMENTS / FIXES
 - General:
 	- Fix potential stack overflow in cfg parsing of bullets, rockets, materials and mutators that can cause KSP to not load if BDBNIC is also installed.
