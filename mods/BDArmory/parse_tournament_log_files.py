@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Tuple, Union
 
-VERSION = "24.0"
+VERSION = "25.0"
 
 parser = argparse.ArgumentParser(description="Tournament log parser", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('tournament', type=str, nargs='*', help="Tournament folder to parse.")
@@ -20,7 +20,7 @@ parser.add_argument('-n', '--no-files', action='store_true', help="Don't create 
 parser.add_argument('-s', '--score', action='store_false', help="Compute scores.")
 parser.add_argument('-so', '--scores-only', action='store_true', help="Only display the scores in the summary on the console.")
 parser.add_argument('-w', '--weights', type=str, default="1,0,0,-1,1,2e-3,3,1.5,4e-3,0,1e-4,4e-5,0.01,0,5e-4,0,1e-4,4e-5,0.15,0,0.002,0,3e-5,1.5e-5,0.075,0,0,0,0,0,0,10,-1,-1",
-                    help="Score weights (in order of main columns from 'Wins' to 'Ram', plus others). Use --show-weights to see them.")
+                    help="Score weights (in order of main columns from 'Wins' to 'Ram', plus others). Use --show-weights to see them. Use -w cfg to read the weights from the score_weights.cfg file.")
 parser.add_argument('-c', '--current-dir', action='store_true', help="Parse the logs in the current directory as if it was a tournament without the folder structure.")
 parser.add_argument('-nc', '--no-cumulative', action='store_true', help="Don't display cumulative scores at the end.")
 parser.add_argument('-nh', '--no-header', action='store_true', help="Don't display the header.")
@@ -65,13 +65,75 @@ else:
     else:
         tournamentDirs = [Path(tournamentDir) for tournamentDir in args.tournament]  # Specified tournament dir
 
-if args.waypoint_scores:
-    args.weights = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,-0.02,-0.003"
-
 score_fields = ('wins', 'survivedCount', 'miaCount', 'deathCount', 'deathOrder', 'deathTime', 'cleanKills', 'assists', 'hits', 'hitsTaken', 'bulletDamage', 'bulletDamageTaken', 'rocketHits', 'rocketHitsTaken', 'rocketPartsHit', 'rocketPartsHitTaken', 'rocketDamage', 'rocketDamageTaken',
                 'missileHits', 'missileHitsTaken', 'missilePartsHit', 'missilePartsHitTaken', 'missileDamage', 'missileDamageTaken', 'ramScore', 'ramScoreTaken', 'battleDamage', 'partsLostToAsteroids', 'HPremaining', 'accuracy', 'rocket_accuracy', 'waypointCount', 'waypointTime', 'waypointDeviation')
 try:
-    weights = list(float(w) for w in args.weights.split(','))
+    if args.weights == 'cfg':
+        with open(Path(__file__).parent / 'PluginData' / 'score_weights.cfg', 'r') as f:
+            lines = f.readlines()
+        field_names = {
+            "Wins": "wins",
+            "Survived": "survivedCount",
+            "MIA": "miaCount",
+            "Deaths": "deathCount",
+            "Death Order": "deathOrder",
+            "Death Time": "deathTime",
+            "Clean Kills": "cleanKills",
+            "Assists": "assists",
+            "Hits": "hits",
+            "Hits Taken": "hitsTaken",
+            "Bullet Damage": "bulletDamage",
+            "Bullet Damage Taken": "bulletDamageTaken",
+            "Rocket Hits": "rocketHits",
+            "Rocket Hits Taken": "rocketHitsTaken",
+            "Rocket Parts Hit": "rocketPartsHit",
+            "Rocket Parts Hit Taken": "rocketPartsHitTaken",
+            "Rocket Damage": "rocketDamage",
+            "Rocket Damage Taken": "rocketDamageTaken",
+            "Missile Hits": "missileHits",
+            "Missile Hits Taken": "missileHitsTaken",
+            "Missile Parts Hit": "missilePartsHit",
+            "Missile Parts Hit Taken": "missilePartsHitTaken",
+            "Missile Damage": "missileDamage",
+            "Missile Damage Taken": "missileDamageTaken",
+            "RamScore": "ramScore",
+            "RamScore Taken": "ramScoreTaken",
+            "Battle Damage": "battleDamage",
+            "Parts Lost To Asteroids": "partsLostToAsteroids",
+            "HP Remaining": "HPremaining",
+            "Accuracy": "accuracy",
+            "Rocket Accuracy": "rocket_accuracy",
+            "Waypoint Count": "waypointCount",
+            "Waypoint Time": "waypointTime",
+            "Waypoint Deviation": "waypointDeviation",
+        }
+        found_section=False
+        tmp_weights = {}
+        for line in lines:
+            line = line.strip()
+            if line == 'ScoreWeights':
+                found_section = True
+                continue
+            if line == f'{{':
+                continue
+            if not found_section:
+                continue
+            if found_section and line == '}':
+                break
+
+            try:
+                field, weight = line.split("=")
+                tmp_weights[field_names[field.strip()]] = float(weight.strip())
+            except:
+                print("Failed to parse score weights.")
+                sys.exit(1)
+        weights = [tmp_weights[field] for field in score_fields]
+    else:
+        weights = list(float(w) for w in args.weights.split(','))
+
+    if args.waypoint_scores:
+        for i in range(len(weights)-3):
+            weights[i] = 0
 except:
     weights = []
 

@@ -3,6 +3,7 @@
 # Standard Library
 import argparse
 import csv
+import re
 import subprocess
 import sys
 import tempfile
@@ -13,7 +14,7 @@ from typing import Union
 import matplotlib.pyplot as plt
 import numpy
 
-VERSION = "5.0"
+VERSION = "6.0"
 
 parser = argparse.ArgumentParser(description="Plot the scores of a tournament as they accumulated per round", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("tournament", nargs="?", type=str, help="The tournament to plot (optional).")
@@ -22,6 +23,7 @@ parser.add_argument('-s', '--save', type=str, nargs='?', const='tmp', help="Save
 parser.add_argument('--transparent', action='store_true', help='Save the PNG image with a transparent background.')
 parser.add_argument("--version", action='store_true', help="Show the script version, then exit.")
 parser.add_argument("-cz", '--cut-zero', action='store_true', help="Cut the y axis off at zero to avoid large negative scores.")
+parser.add_argument('-i', '--ignore', type=str, help="Ignore craft matching the regular expression search term.")
 args = parser.parse_args()
 
 if args.version:
@@ -49,9 +51,15 @@ with open(tournamentDir / "summary.csv", 'r') as f:
 vessel_count = data.index([]) - 1
 names = [data[row][0] for row in range(len(data) - vessel_count, len(data))]
 scores = numpy.array([[float(v) for v in data[row][1:]] for row in range(len(data) - vessel_count, len(data))])
+if args.ignore:
+    keep = [re.search(args.ignore, name) == None for name in names]
+    names = [name for i,name in enumerate(names) if keep[i]]
+    scores = scores[keep]
 plt.figure(figsize=(16, 10), dpi=200)
 plt.plot(scores.transpose(), linewidth=5)
 plt.axhline(color='black')
+plt.xlabel('round')
+plt.ylabel('score')
 if len(names) > 16:  # Roughly half the plot height, put them outside the graph
     plt.legend(names, loc='upper left', bbox_to_anchor=(1, 1))
 else:
