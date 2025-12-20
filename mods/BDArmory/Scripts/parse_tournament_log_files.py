@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Tuple, Union
 
-VERSION = "25.0"
+VERSION = "25.2"
 
 parser = argparse.ArgumentParser(description="Tournament log parser", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('tournament', type=str, nargs='*', help="Tournament folder to parse.")
@@ -52,7 +52,7 @@ if args.current_dir and len(args.tournament) == 0:
 else:
     if len(args.tournament) == 0:
         tournamentDirs = None
-        logsDir = Path(__file__).parent / "Logs"
+        logsDir = Path(__file__).parent.parent / "Logs"
         if logsDir.exists():
             tournamentFolders = list(logsDir.resolve().glob("Tournament*"))
             if len(tournamentFolders) > 0:
@@ -69,7 +69,7 @@ score_fields = ('wins', 'survivedCount', 'miaCount', 'deathCount', 'deathOrder',
                 'missileHits', 'missileHitsTaken', 'missilePartsHit', 'missilePartsHitTaken', 'missileDamage', 'missileDamageTaken', 'ramScore', 'ramScoreTaken', 'battleDamage', 'partsLostToAsteroids', 'HPremaining', 'accuracy', 'rocket_accuracy', 'waypointCount', 'waypointTime', 'waypointDeviation')
 try:
     if args.weights == 'cfg':
-        with open(Path(__file__).parent / 'PluginData' / 'score_weights.cfg', 'r') as f:
+        with open(Path(__file__).parent.parent / 'PluginData' / 'score_weights.cfg', 'r', encoding='utf-8') as f:
             lines = f.readlines()
         field_names = {
             "Wins": "wins",
@@ -187,7 +187,7 @@ def encode_names(log_lines: List[str]) -> Tuple[Dict[str, str], List[str]]:
     for i in range(1, len(log_lines)):  # The first line doesn't contain craft names
         for name in sorted_craft_names:
             log_lines[i] = log_lines[i].replace(name, craft_names[name].decode())
-    encoded_craft_names = {v.decode(): k for k, v in craft_names.items()}
+    encoded_craft_names = {v.decode(): k.replace('\\"', '"') for k, v in craft_names.items()}  # Reverse the craft name encoding dict and fix the \\ due to JSON encoding.
     return encoded_craft_names, log_lines
 
 

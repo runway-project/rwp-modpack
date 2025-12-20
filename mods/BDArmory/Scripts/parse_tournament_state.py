@@ -6,7 +6,7 @@ import gzip
 import json
 from pathlib import Path
 
-VERSION = "1.0"
+VERSION = "1.2"
 
 parser = argparse.ArgumentParser(
     description="Tournament state parser",
@@ -19,7 +19,7 @@ parser.add_argument("-r", "--re-encode", action="store_true", help="Re-encode th
 args = parser.parse_args()
 
 if args.state is None:
-    args.state = Path(__file__).parent / "PluginData" / "tournament.state"
+    args.state = Path(__file__).parent.parent / "PluginData" / "tournament.state"
 state_file: Path = args.state
 json_file: Path = state_file.with_suffix(".json")
 
@@ -27,8 +27,8 @@ if not args.re_encode:  # Decode the tournament.state to pure JSON and optionall
     try:  # Try compressed gzip first
         with gzip.open(args.state, "rb") as f:
             state = json.load(f)
-    except:  # Revert to plain ASCII
-        with open(args.state, "r") as f:
+    except:  # Revert to plain UTF-8
+        with open(args.state, "r", encoding='utf-8') as f:
             state = json.load(f)
 
     # Various elements are recursively encoded in JSON strings due to Unity's limited JSONUtility functionality.
@@ -86,7 +86,7 @@ if not args.re_encode:  # Decode the tournament.state to pure JSON and optionall
         print(json.dumps(state, indent=2))
 
 else:  # Re-encode the tournament.json to a tournament.state file
-    with open(json_file, "r") as f:
+    with open(json_file, "r", encoding='utf-8') as f:
         state = json.load(f)
     separators = (',', ':')
 

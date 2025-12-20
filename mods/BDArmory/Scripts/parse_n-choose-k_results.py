@@ -8,7 +8,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Union
 
-VERSION = "2.0"
+VERSION = "2.2"
 
 parser = argparse.ArgumentParser(description="Parse results.json of a N-choose-K style tournament producing a table of who-beat-who.", formatter_class=argparse.ArgumentDefaultsHelpFormatter, epilog="Note: this also works on FFA style tournaments, but may not be meaningful.")
 parser.add_argument('results', type=str, nargs='?', help="results.json file to parse.")
@@ -30,7 +30,7 @@ def naturalSortKey(key: Union[str, Path]):
         return key  # Otherwise, just use the key.
 
 if args.results is None:
-    logsDir = Path(__file__).parent / "Logs"
+    logsDir = Path(__file__).parent.parent / "Logs"
     if logsDir.exists():
         tournamentFolders = list(logsDir.resolve().glob("Tournament*"))
         if len(tournamentFolders) > 0:
@@ -43,7 +43,7 @@ if args.results is not None:
     if not results_file.exists():
         print(f"File not found: {results_file}")
     else:
-        with open(results_file, 'r') as f:
+        with open(results_file, 'r', encoding='utf-8') as f:
             data = json.load(f)
         counts = Counter([(next(iter(heat['result']['teams'].keys())), next(iter(heat['result']['dead teams'].keys()))) for Round in data.values() for heat in Round.values() if heat['result']['result'] == 'Win'])
         A = set(k[0] for k in counts.keys())

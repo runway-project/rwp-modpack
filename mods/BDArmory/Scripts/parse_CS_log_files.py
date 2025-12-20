@@ -6,7 +6,7 @@ import re
 import sys
 from pathlib import Path
 
-VERSION = "5.0"
+VERSION = "5.3"
 
 parser = argparse.ArgumentParser(description="Log file parser for continuous spawning logs.", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("logs", nargs='*', help="Log files to parse. If none are given, the latest log file is parsed.")
@@ -14,6 +14,7 @@ parser.add_argument("-n", "--no-file", action='store_true', help="Don't create a
 parser.add_argument("-w", "--weights", type=str, default="3,1.5,-1,4e-3,1e-4,4e-5,0.01,5e-4,1e-4,4e-5,0.15,2e-3,3e-5,1.5e-5,0.075,0,0,0", help="Score weights.")
 parser.add_argument("--show-weights", action='store_true', help="Show the score weights.")
 parser.add_argument("-s", "--separately", action='store_true', help="Show the results of each log separately (for multiple logs).")
+parser.add_argument("-a", "--all", action='store_true', help="Glob all the cts-* files in the folder as input.")
 parser.add_argument("--version", action='store_true', help="Show the script version, then exit.")
 args = parser.parse_args()
 
@@ -21,7 +22,7 @@ if args.version:
     print(f"Version: {VERSION}")
     sys.exit()
 
-log_dir = Path(__file__).parent / "Logs" if len(args.logs) == 0 else Path('.')
+log_dir = Path(__file__).parent.parent / "Logs" if len(args.logs) == 0 else Path('.')
 
 fields = ["kills", "assists", "deaths", "hits", "bullet damage", "bullet damage taken", "rocket strikes", "rocket parts hit", "rocket damage",
     "rocket damage taken", "missile strikes", "missile parts hit", "missile damage", "missile damage taken", "rammed parts", "parts lost to asteroids", "accuracy", "rocket accuracy"]
@@ -46,12 +47,12 @@ if len(args.logs) > 0:
     competition_files = [Path(filename) for filename in args.logs if filename.endswith(".log")]
 else:
     competition_files = list(sorted(list(log_dir.glob("cts-*.log"))))
-    if len(competition_files) > 0:
+    if not args.all and len(competition_files) > 0:
         competition_files = competition_files[-1:]
 
 data = {}
 for filename in competition_files:
-    with open(filename, "r") as file_data:
+    with open(filename, "r", encoding="utf-8") as file_data:
         data[filename] = {}
         Craft_Name = None
         for line in file_data:
@@ -200,7 +201,7 @@ if len(data) > 0:
 
             if not args.no_file:
                 # Write results to file
-                with open(log_dir / f"results-{Path(filename).stem}.csv", "w") as results_data:
+                with open(log_dir / f"results-{Path(filename).stem}.csv", "w", encoding="utf-8") as results_data:
                     results_data.write("Name,Score," + ",".join(fields_to_show) + "\n")
                     for craft in sorted(summary, key=lambda c: summary[c]["score"], reverse=True):
                         results_data.write(f"{craft},{summary[craft]['score']:.2f}," + ",".join(f"{summary[craft][field]:.2f}" for field in fields_to_show) + "\n")
@@ -228,7 +229,7 @@ if len(data) > 0:
 
         if not args.no_file:
             # Write results to file
-            with open(log_dir / f"results.csv", "w") as results_data:
+            with open(log_dir / f"results.csv", "w", encoding="utf-8") as results_data:
                 results_data.write("Name,Score," + ",".join(fields_to_show) + "\n")
                 for craft in sorted(summary, key=lambda c: summary[c]["score"], reverse=True):
                     results_data.write(f"{craft},{summary[craft]['score']:.2f}," + ",".join(f"{summary[craft][field]:.2f}" for field in fields_to_show) + "\n")

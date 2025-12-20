@@ -7,7 +7,7 @@ from pathlib import Path
 # Third party imports
 import matplotlib.pyplot as plt
 
-VERSION = "1.0"
+VERSION = "1.1"
 
 
 def plot(paths, colours):
@@ -30,7 +30,7 @@ def plot(paths, colours):
     plt.show()
 
 
-vesselTracesPath = Path(__file__).parent / 'Logs' / 'VesselTraces'
+vesselTracesPath = Path(__file__).parent.parent / 'Logs' / 'VesselTraces'
 if vesselTracesPath.exists():
     paths = [p for p in vesselTracesPath.iterdir() if p.suffix == '.json']
     colours = 'rgbcmyk' * (len(paths) // 8 + 1)  # Loop colours if there's too many paths.
